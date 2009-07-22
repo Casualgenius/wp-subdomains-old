@@ -29,6 +29,15 @@ This section describes how to install the plugin.
 2. Copy the 'wp-subdomains' folder to the '/wp-content/plugins/' directory
 3. Activate the plugin in Wordpress
 
+= Upgrading = 
+
+If Upgrading manually follow the above instrutions, but first deactivate the existing plugin.
+This is so when you activate the new plugin it'll run any required updates.
+
+= Configuration =
+
+See the other notes.
+
 == Frequently Asked Questions ==
 
 = I don't know how to setup a subdomain =
