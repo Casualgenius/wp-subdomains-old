@@ -246,17 +246,16 @@ class WpsSubDomain {
 	var $archive_subdomains = array( WPS_TYPE_CAT, WPS_TYPE_AUTHOR );
 	
 	function WpsSubDomain( $id, $type ) {
-		global $wpdb;
-		
 		$this->id = $id;
 		$this->type = $type;
 		$this->archive = in_array( $this->type, $this->archive_subdomains );
-
 	}
 	
 	function getPosts () {
-	// Fetch the subdomain's posts
+		// Fetch the subdomain's posts
 		if ( $this->archive ) {
+			global $wpdb;
+			
 			// Use custom SQL or wordpress's get_posts function
 			$where = '';
 			$join = '';
@@ -287,13 +286,13 @@ class WpsSubDomain {
 				// Go get the IDs
 				$this->posts = $wpdb->get_col( "SELECT DISTINCT posts.ID FROM {$wpdb->posts} posts ".$join." WHERE ".$where );
 			} else {
-				$this->posts = false;
+				$this->posts = array();
 			}
 		}
 	}
 	
 	function isPostMember( $postID ) {
-		if (!$this->posts) {
+		if ($this->posts === false) {
 			$this->getPosts();
 		}
 		
