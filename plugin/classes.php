@@ -144,7 +144,8 @@ class WpsSubDomains {
 	
 	function getThisSubdomain() {
 		$url = getenv( 'HTTP_HOST' ) . getenv( 'REQUEST_URI' );
-		$subdomains = split( "\.", $url );
+		//$subdomains = split( "\.", $url );
+		$subdomains = explode( ".", $url );
 		$subdomain = $subdomains[0];
 		
 		foreach ( $this->cats as $cat ) {

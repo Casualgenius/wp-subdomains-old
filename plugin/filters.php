@@ -15,10 +15,10 @@ function wps_author_link($link, $id) {
 	return $link;
 }
 
-function wps_tag_link($link, $id) {
+function wps_tag_link($link) {
 	global $wps_this_subdomain;
 	
-	if ($wps_this_subdomain->archive) {
+	if ( (get_option( WPS_OPT_TAGFILTER ) != "") && $wps_this_subdomain->archive) {
 		$link = $wps_this_subdomain->changeGeneralLink($link); 
 	}
 	

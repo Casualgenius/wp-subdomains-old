@@ -176,8 +176,8 @@ class WpsPlugin {
 		//add_filter('wp_login', 'csd_wp_login');
 		//add_filter('wp_logout', 'csd_wp_logout');
 		
-
-		add_filter( 'redirect_canonical', 'wps_redirect_canonical', 10, 2 );
+		// Not yet needed
+		//add_filter( 'redirect_canonical', 'wps_redirect_canonical', 10, 2 );
 		
 		add_filter( 'get_pages', 'wps_filter_pages', 10 );
 		
@@ -188,7 +188,7 @@ class WpsPlugin {
 		add_filter( 'post_link', 'wps_post_link', 10, 2 );
 		add_filter( 'page_link', 'wps_page_link', 10, 2 );
 		add_filter( 'author_link', 'wps_author_link', 10, 2 );
-		add_filter( 'tag_link', 'wps_tag_link', 10, 2 );
+		add_filter( 'tag_link', 'wps_tag_link', 10 );
 		add_filter( 'month_link', 'wps_month_link' );
 		add_filter( 'get_pagenum_link', 'wps_filter_general_url' );
 		add_filter( 'list_cats', 'wps_list_cats', 10, 2 );

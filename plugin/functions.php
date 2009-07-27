@@ -82,8 +82,18 @@ function sd_posts_where( $where ) {
 }
 */
 
-// FIXME: Determine the need and usage of this function
+// Wordpress's Canonical Redirect doesn't really care much about subdomains so this not really needed
 function wps_redirect_canonical( $redirect_url, $requested_url ) {
+	/*
+	// Grab the hostname of the requested url
+	$parsed_url = parse_url($requested_url);
+	$requested_host = $parsed_url['host'];
+	
+	$subdomains = explode ( ".", $requested_host );
+	$subdomain = $subdomains[0];
+	
+	*/
+	/*
 	$blogurl = wps_blogurl ();
 	
 	$url = str_replace ( "http://", "", $requested_url );
@@ -96,7 +106,9 @@ function wps_redirect_canonical( $redirect_url, $requested_url ) {
 	if ( strlen ( $url ) )
 		$url = substr ( $url, 0, strlen ( $url ) - 1 );
 	
-	$subdomains = split ( "\.", $url );
+	//$subdomains = split ( "\.", $url );
+	$subdomains = explode ( ".", $url );
+	
 	$subdomain = $subdomains [sizeof ( $subdomains ) - 1];
 	
 	if ( $subdomain != "www" ) {
@@ -104,6 +116,16 @@ function wps_redirect_canonical( $redirect_url, $requested_url ) {
 	} else {
 		return "";
 	}
+	
+	global $wps_this_subdomain;
+
+	if ($wps_this_subdomain) {
+		return $requested_url;
+	} else {
+		return $redirect_url;
+	}
+*/
+	return $redirect_url;
 }
 
 function wps_admin_notices() {
