@@ -110,14 +110,13 @@ function wps_page_meta_box($post) {
 	//FIXME: change to checkbox for subdomain and add other values
 ?>
 <p>
+<label for="wps_page_subdomain">
+Make the Page a subdomain?
+</label>
 <select name="wps_page_subdomain" id="wps_page_subdomain">
 <option value="0">No</option>
 <option value="1">Yes</option>
 </select>
-
-<label for="wps_page_subdomain">
-Make the Page a subdomain?
-</label>
 </p>
 <p>
 <?php wp_dropdown_categories('hide_empty=0&hierarchical=true'); ?>

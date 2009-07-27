@@ -15,6 +15,16 @@ function wps_author_link($link, $id) {
 	return $link;
 }
 
+function wps_tag_link($link, $id) {
+	global $wps_this_subdomain;
+	
+	if ($wps_this_subdomain->archive) {
+		$link = $wps_this_subdomain->changeGeneralLink($link); 
+	}
+	
+	return $link;
+}
+
 function wps_page_link( $link, $id ) {
 	global $wps_subdomains, $wps_this_subdomain;
 	

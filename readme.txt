@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: casualgenius
-Donate link: http://webdev.casualgenius.com/projects/wordpress-subdomains
+Donate link: http://webdev.casualgenius.com/projects/wordpress-subdomains/donate
 Tags: subdomains, categories, pages, themes 
 Requires at least: 2.7
 Tested up to: 2.8
@@ -192,9 +192,5 @@ To make a page show on all pages even if a category is set to only show tied pag
   define('COOKIE_DOMAIN', '.mydomain.com');
 
   Where mydomain.com is your domain name. Remember to add the preceeding dot (.) as this is what makes it work.
-  
-* If you used the original plugin this was based on and require some of it's custom functions they are still available. In subdomains.php just uncomment the line that reads:
-
-  //require_once ('plugin/deprecated.php');
 
 * In 0.6.1 Subdomain Roots as Indexes became an option where before it was just on by default. If you want your subdomain root pages treated like your main blog index then switch this on. The differences you'll see are down to how your theme handles an Index compared with an Archive.

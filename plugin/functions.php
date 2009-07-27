@@ -11,6 +11,19 @@ function wps_blogurl() {
 	
 	return $url;
 }
+
+function wps_domain() {
+	if (get_option ( WPS_OPT_DOMAIN )) {
+		$domain = get_option ( WPS_OPT_DOMAIN );
+	} else {
+		$domain = get_option ( 'home' );
+		$domain = substr ( $domain, 7 );
+		$domain = str_replace ( "www.", "", $domain );
+	}
+	
+	return $domain;
+}
+
 /*
 function wps_subdomain() {
 	$url = $_SERVER ['HTTP_HOST'];
@@ -123,4 +136,20 @@ function getPageChildren($pageID) {
 	
 	return $childrenARY;
 }
+
+function wps_getUrlPath($url) {
+	$parsed_url = parse_url($url);
+	
+	if(isset($parsed_url['path'])) {
+  	$path = ( (substr($parsed_url['path'], 0, 1) == '/') ? substr($parsed_url['path'], 1) : $parsed_url['path'] );
+	} else {
+		$path = '';
+	}
+	
+	$path .= ( isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '' );
+	$path .= ( isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment'] : '' );
+
+	return $path;	
+}
+
 ?>

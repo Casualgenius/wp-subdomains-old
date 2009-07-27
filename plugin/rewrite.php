@@ -13,7 +13,6 @@ function wps_category_rewrite_rules( $rules ) {
 		} else {
 			// Not in a sub category
 			$rules = $wps_this_subdomain->getRewriteRules();
-			//print('<pre>'.print_r($rules,true).'</pre>');
 		}
 	
 	}
@@ -25,21 +24,8 @@ function wps_author_rewrite_rules( $rules ) {
 	global $wps_this_subdomain;
 	
 	// See if we're on a category subdomain
-	if ( $wps_this_subdomain && ($wps_this_subdomain->type == WPS_TYPE_AUTHOR) ) {
-		/*
-		$tmp_array = array();
-		foreach ($rules as $regexp => $rule) {
-			$regexp = str_replace("author/([^/]+)/", "", $regexp);
-			$rule = str_replace('$matches[1]', $wps_this_subdomain->slug, $rule);
-			$rule = str_replace('$matches[2]', '$matches[1]', $rule);
-			$tmp_array[$regexp] = $rule;
-		}
-		$rules = $tmp_array;
-		*/
-		
+	if ( $wps_this_subdomain && ($wps_this_subdomain->type == WPS_TYPE_AUTHOR) ) {		
 		$rules = $wps_this_subdomain->getRewriteRules();
-		
-	//print('<pre>'.print_r($rules,true).'</pre>');
 	}
 	
 	return $rules;
@@ -105,16 +91,11 @@ function wps_post_rewrite_rules( $rules ) {
 		$rules = $wps_this_subdomain->addRewriteFilter($rules);
 	}
 	
-	//print('<pre>'.print_r($rules,true).'</pre>');
-	
 	return $rules;
 }
 
 function wps_page_rewrite_rules( $rules ) {
-	global $wps_this_subdomain, $wp_rewrite;
-	
-	//print('<pre>'.print_r($rules,true).'</pre>');
-	
+	global $wps_this_subdomain, $wp_rewrite;	
 
 	if ( $wps_this_subdomain && $wps_this_subdomain->type == WPS_TYPE_PAGE ) {
 		$pagestr = $wps_this_subdomain->slug;
@@ -182,8 +163,10 @@ function wps_page_rewrite_rules( $rules ) {
 
 function wps_tag_rewrite_rules( $rules ) {
 	global $wps_this_subdomain;
-	
-	//print('<pre>'.print_r($rules,true).'</pre>');
+
+	if ( $wps_this_subdomain ) {
+		$rules = $wps_this_subdomain->addRewriteFilter($rules);
+	}
 	
 	return $rules;
 }
@@ -199,7 +182,6 @@ function wps_root_rewrite_rules( $rules ) {
 }
 
 function wps_rewrite_rules( $rules ) {
-	//print('<pre>'.print_r($rules,true).'</pre>');
 	return $rules;
 }
 

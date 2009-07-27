@@ -6,7 +6,7 @@
 Plugin Name: WP Subdomains
 Plugin URI: http://webdev.casualgenius.com/projects/wordpress-subdomains/
 Description: Setup your main categories, pages, and authors as subdomains and give them custom themes. Originally based on <a href="http://www.biggnuts.com/wordpress-subdomains-plugin/">Subster Rejunevation</a>.
-Version: 0.6.5
+Version: 0.6.6
 Author: Alex Stansfield
 Author URI: http://www.casualgenius.com
 
@@ -38,8 +38,6 @@ require_once ('plugin/actions.php');
 require_once ('plugin/filters.php');
 require_once ('plugin/rewrite.php');
 require_once ('plugin/admin.php');
-// This contains functions available in the old plugin, uncomment it to use them
-//require_once ('plugin/deprecated.php');
 
 
 // Include the Widgets
@@ -67,7 +65,7 @@ $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
-define( 'WPS_VERSION', '0.6.5' );
+define( 'WPS_VERSION', '0.6.6' );
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
 define( 'WPS_TYPE_AUTHOR', 3 );
@@ -77,6 +75,7 @@ define( 'WPS_OPT_SUBPAGES', 'wps_subpages' );
 define( 'WPS_OPT_SUBAUTHORS', 'wps_subauthors' );
 define( 'WPS_OPT_THEMES', 'wps_themes' );
 define( 'WPS_OPT_ARCFILTER', 'wps_arcfilter' );
+define( 'WPS_OPT_TAGFILTER', 'wps_tagfilter' );
 define( 'WPS_OPT_PAGEFILTER', 'wps_pagefilter' );
 define( 'WPS_OPT_SUBALL', 'wps_subdomainall' );
 define( 'WPS_OPT_NOCATBASE', 'wps_nocatbase' );
@@ -189,6 +188,7 @@ class WpsPlugin {
 		add_filter( 'post_link', 'wps_post_link', 10, 2 );
 		add_filter( 'page_link', 'wps_page_link', 10, 2 );
 		add_filter( 'author_link', 'wps_author_link', 10, 2 );
+		add_filter( 'tag_link', 'wps_tag_link', 10, 2 );
 		add_filter( 'month_link', 'wps_month_link' );
 		add_filter( 'get_pagenum_link', 'wps_filter_general_url' );
 		add_filter( 'list_cats', 'wps_list_cats', 10, 2 );

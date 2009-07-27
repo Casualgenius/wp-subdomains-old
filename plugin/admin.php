@@ -70,7 +70,7 @@ function wps_settings_plugin() {
 <h3>Main Settings</h3>
 
 <table class="form-table">
-<!-- 
+ 
 	<tr valign="top">
 		<th scope="row"><?php
 	_e ( 'Main Domain' )?></th>
@@ -78,7 +78,7 @@ function wps_settings_plugin() {
 			value="<?php
 	echo get_option ( WPS_OPT_DOMAIN )?>"/> <span class="setting-description">If the Main Blog is located on a subdomain (e.g. http://blog.mydomain.com/), enter the Domain here (e.g. mydomain.com).</span></td>
 	</tr>
-	 -->
+	
 	<tr valign="top">
 		<th scope="row"><?php
 	_e ( 'Disable Plugin' )?></th>
@@ -231,11 +231,23 @@ function wps_settings_plugin() {
 	echo $wps_page_metakey_tie;
 	?></b> to the ID number of the category.</span></td>
 	</tr>
+	
+	<tr valign="top">
+		<th scope="row"><?php
+	_e ( 'Use Tag Filtering' )?></th>
+		<td><input type="checkbox" name="wps_tagfilter"
+			value="<?php
+	echo WPS_CHK_ON?>"
+			<?php
+	checked ( WPS_CHK_ON, get_option ( WPS_OPT_TAGFILTER ) );
+	?> /> <span class="setting-description">Activate the Tag filtering system. Viewing Tags will show only 
+	the posts that belong to the subdomain you are on.</span></td>
+	</tr>
 </table>
 
 <input type="hidden" name="action" value="update" /> <input
 	type="hidden" name="page_options"
-	value="wps_domain,wps_disabled,wps_subdomainall,wps_themes,wps_pagefilter,wps_arcfilter,wps_nocatbase,wps_redirectold,wps_subpages,wps_subauthors,wps_keeppagesub,wps_subisindex" />
+	value="wps_domain,wps_disabled,wps_subdomainall,wps_themes,wps_pagefilter,wps_arcfilter,wps_nocatbase,wps_redirectold,wps_subpages,wps_subauthors,wps_keeppagesub,wps_subisindex, wps_tagfilter" />
 
 <p class="submit"><input type="submit" name="Submit"
 	value="<?php
