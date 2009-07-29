@@ -174,4 +174,12 @@ function wps_getUrlPath($url) {
 	return $path;	
 }
 
+function wps_getNonSubCats() {
+	global $wps_subdomains;
+	
+	$cats_root = get_terms( 'category', 'hide_empty=false&parent=0&fields=ids' );
+		
+	return array_diff( $cats_root, array_keys($wps_subdomains->cats) );
+}
+
 ?>

@@ -127,6 +127,8 @@ class WpsPlugin {
 			$this->addFilters();
 		}
 
+		//print("<pre>".print_r($wps_subdomains, true). "</pre>");
+		
 	}
 	
 	function addActions() {

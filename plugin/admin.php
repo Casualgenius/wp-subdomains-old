@@ -272,8 +272,10 @@ function wps_settings_categories() {
 		$categories ['subdomains'] [$catID] ['filter_pages'] = $cat->filter_pages;
 	}
 	
-	if ( ! empty ( $wps_subdomains->cats_nosub ) ) {
-		$tmp_cats = get_categories ( 'hide_empty=0&include=' . implode ( ',', $wps_subdomains->cats_nosub ) );
+	$cats_nosub = wps_getNonSubCats();
+	
+	if ( ! empty ( $cats_nosub ) ) {
+		$tmp_cats = get_categories ( 'hide_empty=0&include=' . implode ( ',', $cats_nosub ) );
 		
 		// Build Excluded Cat array (link, name, slug, theme, tied)
 		foreach ( $tmp_cats as $cat ) {

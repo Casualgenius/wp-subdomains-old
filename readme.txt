@@ -74,7 +74,7 @@ Added Features
 * Add options
   * Keeping Pages on the subdomain, changed to an option for SEO reasons
   * Removing archive status from Subdomain root pages
-* Added wps_on_main_index custom field to make tied pages still appear on your main blog. Useful if you have the subdomain indexes noindexed for SEO purposes
+* Added `wps_on_main_index` custom field to make tied pages still appear on your main blog. Useful if you have the subdomain indexes noindexed for SEO purposes
 	
 Bugs Fixed
 
@@ -115,7 +115,7 @@ Note, some hosting services allow a forward all rule that will forward all subdo
 
 For each Category you want to convert, edit the category in wordpress admin and enable the "Make Subdomain" option.
 
-For each Page you want to convert, edit the page in wordpress admin and add the custom field "wps_page_subdomain" with value "true"
+For each Page you want to convert, edit the page in wordpress admin and add the custom field `wps_page_subdomain` with value "true"
 
 For Author subdomains just switch enable the "Activate Author Subdomains" setting. You cannot pick and choose which authors are subdomains. 
 It is either all or none.
@@ -174,16 +174,16 @@ When viewing this subdomain will filter out pages not tied to it.
 == Page Configuration ==
 
 = Subdomain Page =
-To make static pages act like subdomains, create a custom field variable "wps_page_subdomain" and set it to true.
+To make static pages act like subdomains, create a custom field variable `wps_page_subdomain` and set it to true.
 
 = Custom Theme = 
-To set a theme for a page subdomain, create a custom field variable "wps_page_theme" and set it to the theme that you want to use. The theme name is the same as you'll find it on the edit categories page. Themes only work for pages that are setup as subdomains.
+To set a theme for a page subdomain, create a custom field variable `wps_page_theme` and set it to the theme that you want to use. The theme name is the same as you'll find it on the edit categories page. Themes only work for pages that are setup as subdomains.
 
 = Tie a Page to a Category =
-To tie a static page to a subdomained category, so that it displays this URL category.yourdomain.com/static-page, create a custom field variable "wps_tie_to_category" and set it to the category ID.
+To tie a static page to a subdomained category, so that it displays this URL category.yourdomain.com/static-page, create a custom field variable `wps_tie_to_category` and set it to the category ID.
 
 = Show Page on all Categories =
-To make a page show on all pages even if a category is set to only show tied pages, create a custom field varaible called "wps_showall" and set it to true.
+To make a page show on all pages even if a category is set to only show tied pages, create a custom field varaible called `wps_showall` and set it to true.
 
 == Notes ==
 

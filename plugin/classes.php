@@ -5,8 +5,8 @@ class WpsSubDomains {
 	var $cats = array();
 	var $pages = array();
 	var $authors = array();
-	var $cats_root = array();
-	var $cats_nosub = array();
+	//var $cats_root = array();
+	//var $cats_nosub = array();
 	var $pages_on_index = false;
 	
 	function WpsSubDomains() {
@@ -17,32 +17,32 @@ class WpsSubDomains {
 		//--- Get Root Categories
 		// get_categories version
 		/*
-		$this->cats_root = array();
+		$cats_root = array();
 		foreach ( get_categories( 'hide_empty=false' ) as $cat ) {
 			if ( $cat->parent == 0 ) {
-				$this->cats_root[] = $cat->term_id;
+				$cats_root[] = $cat->term_id;
 			}
 		}
 		*/
-		$this->cats_root = get_terms( 'category', 'hide_empty=false&parent=0&fields=ids' );
+		$cats_root = get_terms( 'category', 'hide_empty=false&parent=0&fields=ids' );
 		
 		/* SQL Version
 		$sql_cats = "select term_id from {$wpdb->term_taxonomy} where parent = 0 and taxonomy = 'category'";
-		$this->cats_root = $wpdb->get_col( $sql_cats );
+		$cats_root = $wpdb->get_col( $sql_cats );
 		*/
 		
 		//--- Work out the Categories to subdomain
 		if ( get_option( WPS_OPT_SUBALL ) != "" ) {
 			$cats_exclude = $wpdb->get_col( "SELECT cat_ID FROM {$table_name} WHERE not_subdomain = 1" );
-			$cats = array_diff( $this->cats_root, $cats_exclude );
+			$cats = array_diff( $cats_root, $cats_exclude );
 		} else {
 			$cats_include = $wpdb->get_col( "SELECT cat_ID FROM {$table_name} WHERE is_subdomain = 1" );
-			$notcats = array_diff( $cats_include, $this->cats_root );
+			$notcats = array_diff( $cats_include, $cats_root );
 			$cats = array_diff( $cats_include, $notcats );
 		}
 		
 		// Set the array of root categories that aren't being turned into Subdomains
-		$this->cats_nosub = array_diff( $this->cats_root, $cats );
+		//$this->cats_nosub = array_diff( $cats_root, $cats );
 		
 		//--- Create Category Subdomains
 		foreach ( $cats as $cat ) {
