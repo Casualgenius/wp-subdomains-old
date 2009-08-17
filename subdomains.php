@@ -84,15 +84,15 @@ define( 'WPS_OPT_DISABLED', 'wps_disabled' );
 define( 'WPS_OPT_KEEPPAGESUB', 'wps_keeppagesub' );
 define( 'WPS_OPT_SUBISINDEX', 'wps_subisindex' );
 
-// Stuff changed in WP 2.8
-if (function_exists('create_initial_taxonomies')) {
-	create_initial_taxonomies();
-}
-
 class WpsPlugin {
 	
 	function WpsPlugin() {
 		global $wps_subdomains, $wps_this_subdomain, $wps_category_base, $wps_showall_pages, $wps_permalink_set;
+		
+		// Stuff changed in WP 2.8
+		if (function_exists('create_initial_taxonomies')) {
+			create_initial_taxonomies();
+		}
 		
 		//--- Create the SubDomains Object
 		$wps_subdomains = new WpsSubDomains( );
@@ -126,8 +126,6 @@ class WpsPlugin {
 			//--- Add the Filters
 			$this->addFilters();
 		}
-
-		//print("<pre>".print_r($wps_subdomains, true). "</pre>");
 		
 	}
 	
@@ -198,7 +196,7 @@ class WpsPlugin {
 }
 
 //--- Register the Activation Hook
-register_activation_hook( 'wp-subdomains/subdomains.php', 'wps_install' );
+register_activation_hook( 'wordpress-subdomains/subdomains.php', 'wps_install' );
 
 //--- Run the Plugin
 global $WpsPlugin;

@@ -55,6 +55,19 @@ None
 
 == Changelog ==
 
+= 0.6.6 =
+
+Added Features
+
+* Have your main blog on a subdomain (e.g. http://blog.mydomain.com/)
+* Tag filters, go to a tag page on a subdomain and see only those posts that are on that subdomain.
+
+Bug Fixes
+
+* Fixed big bug introduced by move to wordpress hosting where the database table the plugin needs isn't created 
+* Made some changes to try and reduce memory usage on large sites, more to come
+
+
 = 0.6.5 = 
 
 * Moved to hosting on Wordpress.org
@@ -122,6 +135,9 @@ It is either all or none.
 
 == Plugin Configuration ==
 
+= Main Domain =
+To use the subdomain blog feature (e.g. main page at http://blog.mydomain.com) you’ll need to enter your blog domain (e.g. mydomain.com).
+
 = Disable Plugin =
 Allows you to disable the plugin functionality whilst still being able to configure it
 
@@ -153,6 +169,9 @@ If you're on a Category or Author subdomain then date archives will show only wh
 
 = Use Page Filtering =
 Turns on the ability to tie pages to specific subdomain categories
+
+= Use Tag Filtering =
+Viewing Tags on a subdomain will show only the posts that belong to the subdomain you are on.
 
 == Category Configuration ==
 

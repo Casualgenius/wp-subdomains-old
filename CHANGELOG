@@ -1,5 +1,17 @@
 CHANGELOG
 
+Version 0.6.6
+
+Added Features
+
+* Have your main blog on a subdomain (e.g. http://blog.mydomain.com/)
+* Tag filters, go to a tag page on a subdomain and see only those posts that are on that subdomain.
+
+Bug Fixes
+
+* Fixed big bug introduced by move to wordpress hosting where the database table the plugin needs isn't created 
+* Made some changes to try and reduce memory usage on large sites, more to come
+
 Version 0.6.5
 
 * Moved to hosting on Wordpress.org
