@@ -104,7 +104,7 @@ function wps_action_page_meta ($type, $place, $post) {
 	add_meta_box('subdomainsdiv', __('WP Subdomains'), 'wps_page_meta_box', 'page', 'normal', 'core');
 }
 
-
+//--- One day this function will let you configure Pages using a pretty form.... one day
 function wps_page_meta_box($post) {
 	
 	//FIXME: change to checkbox for subdomain and add other values

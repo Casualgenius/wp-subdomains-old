@@ -15,33 +15,39 @@ function wps_author_link($link, $id) {
 	return $link;
 }
 
+//--- Filter to Change Links to Tags when Tag Filtering is on
 function wps_tag_link($link) {
-	global $wps_this_subdomain;
+	global $wps_this_subdomain, $wps_filter_tags_in_loop;
 	
-	if ( (get_option( WPS_OPT_TAGFILTER ) != "") && $wps_this_subdomain->archive) {
-		$link = $wps_this_subdomain->changeGeneralLink($link); 
+	// If Tag Filtering is on then Proceed
+	if (get_option( WPS_OPT_TAGFILTER ) != "") {
+		if ($wps_this_subdomain->archive) {
+			// If we're on an Archive Subdomain just change the tag link
+			$link = $wps_this_subdomain->changeGeneralLink($link);
+		} elseif (in_the_loop() && $wps_filter_tags_in_loop) {
+			// If not on a subdomain and in the loop and Filtering Tags in Loop is on
+			global $wps_subdomains, $post;
+			// Check if current post belongs to a subdomain
+			if ($subdomain = $wps_subdomains->getPostSubdomain( $post->ID ) ) {
+				// If so then change the tag link
+				$link = $wps_subdomains->cats[$subdomain]->changeGeneralLink( $link );
+			}
+		}
 	}
 	
+	// Return the Tag Link
 	return $link;
 }
 
 function wps_page_link( $link, $id ) {
 	global $wps_subdomains, $wps_this_subdomain;
 	
-	// get the post
-	$post = get_post( $id );
-	
-	if ( $subdomain = $wps_subdomains->getPageSubdomain( $post->ID ) ) {
+	if ( $subdomain = $wps_subdomains->getPageSubdomain( $id ) ) {
 		// It's a Subdomain page (or child of one) so grab the correct link
-		$link = $wps_subdomains->pages[$subdomain]->changePageLink( $post->ID, $link );
+		$link = $wps_subdomains->pages[$subdomain]->changePageLink( $id, $link );
 	} else {
-		// Cycle through until you find the ultimate parent page of this page.
-		while ( $post->post_parent != 0 ) {
-			$post = get_post( $post->post_parent );
-		}
-		
 		// Check if this page is tied to a category, if so change the link appropriately
-		if ( $catID = $wps_subdomains->findTiedPage( $post->ID ) ) {
+		if ( $catID = $wps_subdomains->findTiedPage( $id ) ) {
 			$link = $wps_subdomains->cats[$catID]->changePostLink( $link );
 		} else if ( $wps_this_subdomain && $wps_this_subdomain->archive ) {
 			//--- If the user wants to keep pages on subdomain being viewed
@@ -56,29 +62,41 @@ function wps_page_link( $link, $id ) {
 	return $link;
 }
 
-function wps_post_link( $link, $id ) {
-	global $csd_timeofchange, $wps_this_subdomain, $wps_subdomains;
+function wps_post_link( $link, $post_id ) {
+	global $wps_this_subdomain, $wps_subdomains;
 
+	// FIXME: Would this ever happen?
+	// If we're passed an object let's hope it's a Post object ;)
+	if ( is_object( $post_id )) {
+		$post_id = $post_id->ID;
+	}
+	/*
 	// Get the post
 	if ( is_array( $id ) ) {
 		$post = $id;
 	} else {
+		//print('get post<br/>');
 		$post = get_post( $id );
 	}
-	/*
-	if ( $post->post_status != "draft" && strtotime ( $post->post_date ) < $csd_timeofchange ) {
-		return get_bloginfo ( "url" ) . "/archives/" . strftime ( "%Y/%m/", strtotime ( $post->post_date ) ) . $post->post_name . ".html";
-	}
-	*/
+*/
 	// Check first if this post belongs to a subdomain we're on
 	// if so then create the link for that subdomain
 	// otherwise check if it belongs to any other subdomain category
+	/*
 	if ( $wps_this_subdomain && $wps_this_subdomain->archive && $wps_this_subdomain->isPostMember( $post->ID ) ) {
 		// Post belongs to subdomain category we're currently on
 		$link = $wps_this_subdomain->changePostLink( $link, $post->ID );
 	} elseif ( $subdomain = $wps_subdomains->getPostSubdomain( $post->ID ) ) {
 		// Post belongs to another subdomain category
 		$link = $wps_subdomains->cats[$subdomain]->changePostLink( $link, $post->ID );
+	}
+*/
+	if ( $wps_this_subdomain && $wps_this_subdomain->archive && $wps_this_subdomain->isPostMember( $post_id ) ) {
+		// Post belongs to subdomain category we're currently on
+		$link = $wps_this_subdomain->changePostLink( $link, $post_id );
+	} elseif ( $subdomain = $wps_subdomains->getPostSubdomain( $post_id ) ) {
+		// Post belongs to another subdomain category
+		$link = $wps_subdomains->cats[$subdomain]->changePostLink( $link, $post_id );
 	}
 	
 	// return the link
@@ -229,6 +247,69 @@ function wps_filter_adjacent_where( $where, $in_same_cat = '', $excluded_categor
 	
 	// return the where sql
 	return $where;
+}
+
+function wps_filter_tag_cloud( $args = array() ) {
+	global $wps_this_subdomain;
+	
+	// Only do any filtering if the Tag Filter is on and we're on an archive Subdomain 
+	if ( (get_option( WPS_OPT_TAGFILTER ) != "") && $wps_this_subdomain->archive) {
+		// Add the wps_tag_cloud arg so later we know we're filtering the tag_cloud
+		$args['wps_tag_cloud'] = true;
+		
+		// If the subdomain doesn't know it's posts then fetch them
+		if ($wps_this_subdomain->posts === false) {
+			$wps_this_subdomain->getPosts();
+		}
+		// Add get the tags for the subdomain's posts and put them in the 'include' arg
+		$args['include'] = implode(",", wp_get_object_terms($wps_this_subdomain->posts, 'post_tag', 'fields=ids'));
+	}
+	
+	// return the args
+	return $args;
+}
+
+function wps_filter_get_terms($terms, $taxonomies, $args) {
+	
+	// Filter Tags of the wps_tag_cloud arg is set
+	if ($args['wps_tag_cloud'] === true) {
+		global $wpdb, $wps_this_subdomain;
+		
+		// If the subdomain doesn't know it's posts then fetch them
+		if ($wps_this_subdomain->posts === false) {
+			$wps_this_subdomain->getPosts();
+		}
+		
+		// Create query to find the tag ids and they Post Count for the posts in this subdomain
+		$sql = "SELECT tr.term_taxonomy_id, count(tr.object_id) as PostCount
+					FROM " . $wpdb->term_relationships . " tr
+					INNER JOIN " . $wpdb->term_taxonomy . " tt
+						ON tt.term_taxonomy_id = tr.term_taxonomy_id
+					WHERE tt.taxonomy = 'post_tag'
+					AND tr.object_id in (".implode(",", $wps_this_subdomain->posts).")
+					GROUP BY term_taxonomy_id";
+		
+		// Get Results
+		$results = $wpdb->get_results($sql, OBJECT_K);
+		
+		// Loop through terms supplied by get_terms
+		foreach ($terms as $key => $tag) {	
+			// Check if term_id exists in SQL results 
+			if (array_key_exists($tag->term_id, $results)) {
+				// Set tags's count to the correct count for this Subdomain
+				$tag->count = $results[$tag->term_id]->PostCount;
+			} else {
+				// Set tag's count to zero as there are no posts for this tag in this subdomain 
+				$tag->count = 0;
+			}
+			
+			// Stick the tag back in the terms array
+			$terms[$key] = $tag;
+		}
+
+	}
+	// return the terms
+	return $terms;
 }
 
 function wps_filter_bloginfo_url( $url, $show ) {

@@ -6,7 +6,7 @@
 Plugin Name: WP Subdomains
 Plugin URI: http://webdev.casualgenius.com/projects/wordpress-subdomains/
 Description: Setup your main categories, pages, and authors as subdomains and give them custom themes. Originally based on <a href="http://www.biggnuts.com/wordpress-subdomains-plugin/">Subster Rejunevation</a>.
-Version: 0.6.6
+Version: 0.6.7
 Author: Alex Stansfield
 Author URI: http://www.casualgenius.com
 
@@ -48,24 +48,21 @@ require_once ('widgets/categories.php');
 global $wps_subdomains, $wps_this_subdomain, $wps_showall_pages;
 
 // User Settings
-//$csd_redir_wildcards = TRUE;
-//$csd_timeofchange = 1099179646;
 $wps_page_metakey_theme = 'wps_page_theme';
 $wps_page_metakey_subdomain = 'wps_page_subdomain';
 $wps_page_metakey_tie = 'wps_tie_to_category';
 $wps_page_metakey_showall = 'wps_showall';
 $wps_page_on_main_index = 'wps_on_main_index';
+$wps_filter_tags_in_loop = false;
 
 // Plugin Stuff
-//$csd_category_rules = array();
-//$csd_post_rules = array();
 $wps_permalink_set = false;
 $wps_subdomains = false;
 $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
-define( 'WPS_VERSION', '0.6.6' );
+define( 'WPS_VERSION', '0.6.7' );
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
 define( 'WPS_TYPE_AUTHOR', 3 );
@@ -127,6 +124,9 @@ class WpsPlugin {
 			$this->addFilters();
 		}
 		
+		// this action can't be in addActions because the admin interface doesn't work without it.
+        add_action( 'admin_init', 'wps_admin_init' );
+		
 	}
 	
 	function addActions() {
@@ -169,6 +169,11 @@ class WpsPlugin {
 		// Filters for Archives
 		add_filter( 'getarchives_where', 'wps_filter_archive_where', 10, 2 );
 		add_filter( 'getarchives_join', 'wps_filter_archive_join', 10, 2 );
+		
+		// Filter for Tag Cloud
+		add_filter( 'widget_tag_cloud_args', 'wps_filter_tag_cloud', 10, 2);
+		add_filter( 'get_terms', 'wps_filter_get_terms', 10, 3);
+		
 		
 		add_filter( 'pre_option_template', 'wps_change_template' );
 		add_filter( 'pre_option_stylesheet', 'wps_change_template' );

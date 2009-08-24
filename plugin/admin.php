@@ -63,10 +63,14 @@ function wps_settings_plugin() {
 	
 <form method="post" action="options.php">
 <?php
+    if (function_exists('settings_fields')){
+        settings_fields('wps-settings-group');
+    }
+    else{
 	wp_nonce_field ( 'update-options' );
+    }
 	?>
 	
-
 <h3>Main Settings</h3>
 
 <table class="form-table">
@@ -488,14 +492,19 @@ function wps_add_options() {
 
 function wps_admin_init(){
 	if (function_exists('register_setting')){
+		// this whitelists form elements on the options page
+		register_setting( 'wps-settings-group', 'wps_domain');
 		register_setting( 'wps-settings-group', 'wps_disabled', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_subdomainall', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_subpages', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_subauthors', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_themes', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_redirectold', 'wps_filter_on_off');
+		register_setting( 'wps-settings-group', 'wps_keeppagesub', 'wps_filter_on_off');
+		register_setting( 'wps-settings-group', 'wps_subisindex', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_arcfilter', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_pagefilter', 'wps_filter_on_off');
+		register_setting( 'wps-settings-group', 'wps_tagfilter', 'wps_filter_on_off');
 	}
 }
 

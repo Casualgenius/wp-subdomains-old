@@ -1,17 +1,15 @@
 <?php
-
+/*
 function wps_blogurl() {
-	/*if (get_option ( WPS_OPT_DOMAIN )) {
-		$url = get_option ( WPS_OPT_DOMAIN );
-	} else {*/
-		$url = get_option ( 'home' );
-		$url = substr ( $url, 7 );
-		$url = str_replace ( "www.", "", $url );
-	/*}*/
+	$url = get_option ( 'home' );
+	$url = substr ( $url, 7 );
+	$url = str_replace ( "www.", "", $url );
 	
 	return $url;
 }
+*/
 
+//--- Return the domain of the blog
 function wps_domain() {
 	if (get_option ( WPS_OPT_DOMAIN )) {
 		$domain = get_option ( WPS_OPT_DOMAIN );
@@ -24,16 +22,6 @@ function wps_domain() {
 	return $domain;
 }
 
-/*
-function wps_subdomain() {
-	$url = $_SERVER ['HTTP_HOST'];
-	$urlparts = split ( '\.', $url );
-	
-	$subdomain = $urlparts [0];
-	
-	return ($subdomain == 'www' ? '' : $subdomain);
-}
-*/
 //--- Find all the Pages marked with the showall meta key
 function wps_showall_pages() {
 	global $wpdb, $wps_page_metakey_showall;
@@ -128,15 +116,18 @@ function wps_redirect_canonical( $redirect_url, $requested_url ) {
 	return $redirect_url;
 }
 
+//--- Notices for the Admin regarding things that will stop the plugin operating
 function wps_admin_notices() {
 	global $wps_permalink_set;
 
 	$notices = '';
 	
+	// Is the Plugin Disabled? Notify the Admin
 	if (get_option(WPS_OPT_DISABLED) != '') {
 		$notices .= '<h3>Note: you currently have the plugin set as DISABLED.</h3>';
 	}
 	
+	// Are permalinks not configured? Notify the Admin
 	if (!$wps_permalink_set) {
 		$notices .= '<h3>Warning: you do not have permalinks configured so this plugin cannot operate.</h3>';	
 	}
@@ -160,17 +151,22 @@ function getPageChildren($pageID) {
 }
 
 function wps_getUrlPath($url) {
+	// Parse the URL to split it into parts
 	$parsed_url = parse_url($url);
 	
 	if(isset($parsed_url['path'])) {
+		// Get path without any preceeding '/'
   	$path = ( (substr($parsed_url['path'], 0, 1) == '/') ? substr($parsed_url['path'], 1) : $parsed_url['path'] );
 	} else {
 		$path = '';
 	}
 	
+	// Add any query onto the path
 	$path .= ( isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '' );
+	// Add any anchors (etc) onto the path
 	$path .= ( isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment'] : '' );
 
+	// Return the path
 	return $path;	
 }
 

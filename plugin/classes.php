@@ -303,23 +303,14 @@ class WpsSubDomain {
 		return in_array( $postID, $this->posts );
 	}
 	
-	function changePostLink( $link, $postid = 0 ) {
-		//$blogurl = wps_blogurl();
-		//$path = substr( $link, strpos( $link, $blogurl ) + strlen( $blogurl ) + 1 );
-		
+	function changePostLink( $link, $postid = 0 ) {		
 		$path = wps_getUrlPath($link);
-		
 		$link = $this->getSubdomainLink();
 		
 		switch ( $this->type ) {
 			case WPS_TYPE_CAT :
 				$link .= $this->changePostPath( $path, $postid );
 				break;
-			/*
-			case WPS_TYPE_PAGE :
-				$link = $sublink;
-				break;
-			*/
 			case WPS_TYPE_AUTHOR :
 				$link .= $path;
 				break;
@@ -328,22 +319,24 @@ class WpsSubDomain {
 		return $link;
 	}
 	
-	function getSubdomainLink() {
-		//$blogurl = wps_blogurl();
-		//$link = "http://" . $this->slug . "." . $blogurl . "/";
+	function getSubdomainLink($addslash = true) {
+		$link = "http://" . $this->slug . "." . wps_domain();
 		
-		$link = "http://" . $this->slug . "." . wps_domain() . "/";
+		if ($addslash) {
+			$link .= "/";
+		}
 		
 		return $link;
 	}
 	
 	function changeGeneralLink( $link ) {
 		$path = wps_getUrlPath($link);
-		$link = $this->getSubdomainLink() . $path;
 		
-		//$link = substr( $link, 7 );
-		//$link = str_replace( "www.", "", $link );
-		//$link = 'http://' . $this->slug . '.' . $link;
+		if ($path) {
+			$link = $this->getSubdomainLink() . $path;
+		} else {
+			$link = $this->getSubdomainLink(false);			
+		}
 		
 		return $link;
 	}
@@ -497,26 +490,21 @@ class WpsSubDomainCat extends WpsSubDomain {
 	function changeCategoryLink( $catID, $link = '' ) {
 		global $wps_category_base;
 		
-		//$blogurl = wps_blogurl();
-		
 		if ( $catID == $this->id ) {
-			//$link = "http://" . $this->slug . "." . $blogurl . "/";
-			$link = $this->getSubdomainLink();
+			$link = $this->getSubdomainLink(false);
 		} else {
 			$this_category = get_category( $catID );
 			
 			$kid_string = '';
 			
 			while ( $this_category->term_id != $this->id ) {
-				$kid_string = $this_category->slug . "/" . $kid_string;
+				$kid_string = $this_category->slug . '/' . $kid_string;
 				$this_category = get_category( $this_category->category_parent );
 			}
 			
 			if ( get_option( WPS_OPT_NOCATBASE ) ) {
-				//$link = "http://" . $this->slug . "." . $blogurl . "/" . $kid_string;
 				$link = $this->getSubdomainLink() . $kid_string;
 			} else {
-				//$link = "http://" . $this->slug . "." . $blogurl . "/" . $wps_category_base . $kid_string;
 				$link = $this->getSubdomainLink() . $wps_category_base . $kid_string;
 			}
 		}
@@ -607,14 +595,12 @@ class WpsSubDomainPage extends WpsSubDomain {
 	}
 	
 	function changePageLink( $pageID, $link ) {
-		
-		//$blogurl = wps_blogurl();
-		
+	
 		if ( in_array( $pageID, $this->getAllIDs() ) ) {
 			if ( $pageID == $this->id ) {
-				//$link = "http://" . $this->slug . "." . $blogurl . "/";
-				$link = $this->getSubdomainLink();
+				$link = $this->getSubdomainLink(false);
 			} else {
+				// FIXME: need a way to do this without get_post
 				$this_page = get_post( $pageID );
 				
 				$kid_string = '';
@@ -623,10 +609,8 @@ class WpsSubDomainPage extends WpsSubDomain {
 					$kid_string = $this_page->post_name . "/" . $kid_string;
 					$this_page = get_post( $this_page->post_parent );
 				}
-				
-				//$link = "http://" . $this->slug . "." . $blogurl . "/" . $kid_string;
+
 				$link = $this->getSubdomainLink() . $kid_string;
-			
 			}
 		}
 		
