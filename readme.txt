@@ -55,6 +55,19 @@ None
 
 == Changelog ==
 
+= 0.7.0 =
+
+Added Features
+
+* Compatibility with WPMU - Thanks to Scott Lindsey
+* Tag Cloud now filtered properly
+* Tag Filtering in Loop by setting $wps_filter_tags_in_loop to true in subdomains.php
+
+Bug Fixes
+
+* If a subdomain had no direct posts but sub categories with posts it didn't show up properly
+* Cleaned up more code and removed calls no longer required, hopefully more speed and memory improvements
+
 = 0.6.6 =
 
 Added Features
@@ -200,6 +213,7 @@ To set a theme for a page subdomain, create a custom field variable `wps_page_th
 
 = Tie a Page to a Category =
 To tie a static page to a subdomained category, so that it displays this URL category.yourdomain.com/static-page, create a custom field variable `wps_tie_to_category` and set it to the category ID.
+If you want this page to still appear on your blog index then set `wps_on_main_index` to true.
 
 = Show Page on all Categories =
 To make a page show on all pages even if a category is set to only show tied pages, create a custom field varaible called `wps_showall` and set it to true.

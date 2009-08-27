@@ -1,26 +1,22 @@
 TODO
 
-Next Release
+Next Releases
 
-* Support for blogs that have their main site on a subdomain
-
-* tags on the domain
+* use edit_category_form_fields action to add the subdomain category options
 
 * Change page options to graphical using add_meta_box
 
 * Google sitemaps support
 
-* Redirect Old Post links
-
-* Check compatibility with popular plugins
-
 * Create HOWTO for setting up the plugin
 
 Down the Line
 
-* Remove category base
+* Redirect Old Post links
 
-* Move category settings into the plugin settings
+* Check compatibility with popular plugins
+
+* Remove category base
 
 * Recent Posts filter
 

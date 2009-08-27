@@ -519,25 +519,13 @@ function wps_filter_on_off($data){
 
 function wps_admin_footer( $content ) {
 	// FIXME: Improved the javascript, still prefer to do this another way
-	
 
-	global $wpdb, $user_level, $wps_subdomains;
+	global $wpdb;
 	$table_name = $wpdb->prefix . "category_subdomains";
 	
 	$cat_theme = "(none)";
 	// Are we on the right page?
 	if ( preg_match ( '|categories.php|i', $_SERVER ['SCRIPT_NAME'] ) && $_REQUEST ['action'] == 'edit' ) {
-
-		// FIXME: use the classes as they have the information already.
-		/*
-		if ($catsub = $wps_subdomains->cats[$cat_ID]) {
-			$cat_theme = $catsub->theme;
-			$checked_exclude = ('1' == $csd_cat_options->not_subdomain) ? ' checked="checked"' : '';
-			$checked_include = ('1' == $csd_cat_options->is_subdomain) ? ' checked="checked"' : '';
-			$checked_filterpages = ('1' == $catsub->filter_pages) ? ' checked="checked"' : '';
-			$link_title = $catsub->link_title;
-		}
-		*/
 		$csd_cat_options = $wpdb->get_row ( "SELECT * FROM {$table_name} WHERE cat_ID = {$_REQUEST['cat_ID']};" );
 		$cat_theme = stripslashes ( $csd_cat_options->cat_theme );
 		$checked_exclude = ('1' == $csd_cat_options->not_subdomain) ? ' checked="checked"' : '';
@@ -560,28 +548,28 @@ function addCatEditRow(th, tr) {
 	newCell.innerHTML = tr;
 }
 
-addCatEditRow('Make Subdomain', '<input type="checkbox" name="csd_include" value="true"<?php echo $checked_include; ?> /><br/>Select this to turn the category into a Subdomain.<br/>Category must be a main category.</td>');
+addCatEditRow('Make Subdomain', '<input style="width: auto;" type="checkbox" name="csd_include" value="true"<?php echo $checked_include; ?> /><br/>Select this to turn the category into a Subdomain.<br/>Category must be a main category.');
 
-addCatEditRow('Exclude from All', '<input type="checkbox" name="csd_exclude" value="true"<?php echo $checked_exclude; ?> /><br/>Select this to exclude the Category from being a subdomain when <b>Make all Subdomains</b> is selected in the plugin settings</td>');
+addCatEditRow('Exclude from All', '<input style="width: auto;" type="checkbox" name="csd_exclude" value="true"<?php echo $checked_exclude; ?> /><br/>Select this to exclude the Category from being a subdomain when <b>Make all Subdomains</b> is selected in the plugin settings.');
 
-addCatEditRow('Select Category Theme', '<select name="csd_cat_theme" id="wps_cat_theme"/></select><br/>Pick your theme name and activate Subdomain Themes in <a href="/wp-admin/admin.php?page=wps_settings">Plugin Settings</a>');
+addCatEditRow('Select Category Theme', '<select name="csd_cat_theme" id="wps_cat_theme"/></select><br/>Pick your theme name and activate Subdomain Themes in <a href="/wp-admin/admin.php?page=wps_settings">Plugin Settings</a>.');
 
 addCatEditRow('Custom Link Title', '<input type="text" name="csd_link_title" value="<?php	echo $link_title; ?>" /><br/>Pick a custom title to appear in any links to this Subdomain.');
 
-addCatEditRow('Show only tied pages', '<input type="checkbox" name="csd_filterpages" value="true"<?php echo $checked_filterpages; ?> /><br/>Select this to only filter out pages not tied to categories, page lists will only show pages tied to this category');
+addCatEditRow('Show only tied pages', '<input style="width: auto;" type="checkbox" name="csd_filterpages" value="true"<?php echo $checked_filterpages; ?> /><br/>Select this to only filter out pages not tied to categories, page lists will only show pages tied to this category.');
 
 var wps_themes_dropdown = document.getElementById('wps_cat_theme');
 
-wps_themes_dropdown.options[0] = new Option('(none)','(none)');
+wps_themes_dropdown.options[0] = new Option('-- None --','(none)');
 
 <?php
 		$themes = get_themes ();
 		$count = 1;
 		foreach ( $themes as $theme ) {
 			if ( $cat_theme == $theme ['Template'] )
-				echo "wps_themes_dropdown.options[" . ($count ++) . "] = new Option('{$theme['Template']}', '{$theme['Template']}', true);\n";
+				echo "wps_themes_dropdown.options[" . ($count ++) . "] = new Option('{$theme['Name']}', '{$theme['Template']}', true);\n";
 			else
-				echo "wps_themes_dropdown.options[" . ($count ++) . "] = new Option('{$theme['Template']}', '{$theme['Template']}', false);\n";
+				echo "wps_themes_dropdown.options[" . ($count ++) . "] = new Option('{$theme['Name']}', '{$theme['Template']}', false);\n";
 		}
 ?>
 //--></script>

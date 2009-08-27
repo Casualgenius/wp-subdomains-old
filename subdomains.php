@@ -63,6 +63,7 @@ $wps_showall_pages = array();
 
 // Defines
 define( 'WPS_VERSION', '0.6.7' );
+define( 'WPS_WP_VERSION_MIN', '2.7.0');
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
 define( 'WPS_TYPE_AUTHOR', 3 );
@@ -130,6 +131,8 @@ class WpsPlugin {
 	}
 	
 	function addActions() {
+		global $wp_version;
+		
 		add_action( 'init', 'wps_init', 2 );
 		
 		// Only redirect pages when not in admin section
@@ -141,10 +144,16 @@ class WpsPlugin {
 		
 		add_action( 'parse_query', 'wps_action_parse_query' );
 		
-		//add_action( 'do_meta_boxes', 'wps_action_page_meta', 10, 3);
+		// If newer version of Wordpress use action method for adding Subdomain options to Edit Category
+		if ($wp_version > '2.8.0') {
+			add_action( 'edit_category_form_fields', 'wps_action_edit_category' );
+		}
+		
+		add_action( 'do_meta_boxes', 'wps_action_page_meta', 10, 3);
 	}
 	
 	function addFilters() {
+		global $wp_version;
 		//add_filter ( 'posts_where', 'sd_posts_where' );
 		
 
@@ -157,7 +166,11 @@ class WpsPlugin {
 		add_filter( 'category_rewrite_rules', 'wps_category_rewrite_rules' );
 		add_filter( 'author_rewrite_rules', 'wps_author_rewrite_rules' );
 		
-		add_filter( 'admin_footer', 'wps_admin_footer' );
+		
+		// If older version of Wordpress use Javascript method for adding Subdomain options to Edit Category
+		if ($wp_version < '2.8.0') {
+			add_filter( 'admin_footer', 'wps_admin_footer' );
+		}
 		
 		// Filters for Adjacent Posts
 		// FIXME: Check args getting through

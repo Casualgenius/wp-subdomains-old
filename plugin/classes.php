@@ -15,16 +15,7 @@ class WpsSubDomains {
 		$table_name = $wpdb->prefix . "category_subdomains";
 		
 		//--- Get Root Categories
-		// get_categories version
-		/*
-		$cats_root = array();
-		foreach ( get_categories( 'hide_empty=false' ) as $cat ) {
-			if ( $cat->parent == 0 ) {
-				$cats_root[] = $cat->term_id;
-			}
-		}
-		*/
-		$cats_root = get_terms( 'category', 'hide_empty=false&parent=0&fields=ids' );
+		$cats_root = get_terms( 'category', 'hide_empty=0&parent=0&fields=ids' );
 		
 		/* SQL Version
 		$sql_cats = "select term_id from {$wpdb->term_taxonomy} where parent = 0 and taxonomy = 'category'";
@@ -40,9 +31,6 @@ class WpsSubDomains {
 			$notcats = array_diff( $cats_include, $cats_root );
 			$cats = array_diff( $cats_include, $notcats );
 		}
-		
-		// Set the array of root categories that aren't being turned into Subdomains
-		//$this->cats_nosub = array_diff( $cats_root, $cats );
 		
 		//--- Create Category Subdomains
 		foreach ( $cats as $cat ) {
