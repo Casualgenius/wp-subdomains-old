@@ -6,6 +6,7 @@ function wps_init () {
 		// Stuff changed in WP 2.8
 		if (function_exists('set_transient')) {
 			set_transient('rewrite_rules', "");
+			update_option('rewrite_rules', "");
 		} else {
 			update_option('rewrite_rules', "");
 		}

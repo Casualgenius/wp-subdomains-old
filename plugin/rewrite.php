@@ -181,7 +181,7 @@ function wps_root_rewrite_rules( $rules ) {
 	return $rules;
 }
 
-function wps_rewrite_rules( $rules ) {
+function wps_rewrite_rules( $rules ) {	
 	return $rules;
 }
 

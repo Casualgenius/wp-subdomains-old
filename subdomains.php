@@ -62,7 +62,7 @@ $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
-define( 'WPS_VERSION', '0.6.7' );
+define( 'WPS_VERSION', '0.7.0' );
 define( 'WPS_WP_VERSION_MIN', '2.7.0');
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
@@ -145,7 +145,7 @@ class WpsPlugin {
 		add_action( 'parse_query', 'wps_action_parse_query' );
 		
 		// If newer version of Wordpress use action method for adding Subdomain options to Edit Category
-		if ($wp_version > '2.8.0') {
+		if ($wp_version >= '2.8.3') {
 			add_action( 'edit_category_form_fields', 'wps_action_edit_category' );
 		}
 		
@@ -168,7 +168,7 @@ class WpsPlugin {
 		
 		
 		// If older version of Wordpress use Javascript method for adding Subdomain options to Edit Category
-		if ($wp_version < '2.8.0') {
+		if ($wp_version < '2.8.3') {
 			add_filter( 'admin_footer', 'wps_admin_footer' );
 		}
 		
