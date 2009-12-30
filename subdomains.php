@@ -6,7 +6,7 @@
 Plugin Name: WP Subdomains
 Plugin URI: http://webdev.casualgenius.com/projects/wordpress-subdomains/
 Description: Setup your main categories, pages, and authors as subdomains and give them custom themes. Originally based on <a href="http://www.biggnuts.com/wordpress-subdomains-plugin/">Subster Rejunevation</a>.
-Version: 0.6.7
+Version: 1.0.0
 Author: Alex Stansfield
 Author URI: http://www.casualgenius.com
 
@@ -62,7 +62,7 @@ $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
-define( 'WPS_VERSION', '0.7.0' );
+define( 'WPS_VERSION', '1.0.0' );
 define( 'WPS_WP_VERSION_MIN', '2.7.0');
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
