@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: casualgenius
-Donate link: http://webdev.casualgenius.com/projects/wordpress-subdomains/donate
+Donate link: http://projects.casualgenius.com/wordpress-subdomains/donate
 Tags: subdomains, categories, pages, themes 
 Requires at least: 2.7
 Tested up to: 2.9
@@ -61,6 +61,7 @@ Added Features
 
 * Tag Cloud now filtered properly
 * Tag Filtering in Loop by setting $wps_filter_tags_in_loop to true in subdomains.php
+* Attachments on Subdomains - Thanks to Alban
 
 Bug Fixes
 

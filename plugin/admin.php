@@ -198,9 +198,20 @@ function wps_settings_plugin() {
 	echo WPS_CHK_ON?>"
 			<?php
 	checked ( WPS_CHK_ON, get_option ( WPS_OPT_SUBISINDEX ) );
-	?> /> <span class="setting-description">The main page of Category and Author Subdomains will be tre <br />
-	ated by Wordpress as an Index rather than an archive.<br />
+	?> /> <span class="setting-description">The main page of Category and Author Subdomains will be treated by Wordpress as an Index rather than an archive.<br />
 		The difference between how an Index and an Archive is displayed is set by your theme.</span>
+		</td>
+	</tr>
+
+        <tr valign="top">
+		<th scope="row"><?php
+	_e ( 'Manage Attachment' )?></th>
+		<td><input type="checkbox" name="wps_attachment"
+			value="<?php
+	echo WPS_CHK_ON?>"
+			<?php
+	checked ( WPS_CHK_ON, get_option ( WPS_OPT_ATTACHMENT ) );
+	?> /> <span class="setting-description">The attachement pages and link will be managed and show in the corresponding subdomains.</span>
 		</td>
 	</tr>
 </table>
@@ -251,7 +262,7 @@ function wps_settings_plugin() {
 
 <input type="hidden" name="action" value="update" /> <input
 	type="hidden" name="page_options"
-	value="wps_domain,wps_disabled,wps_subdomainall,wps_themes,wps_pagefilter,wps_arcfilter,wps_nocatbase,wps_redirectold,wps_subpages,wps_subauthors,wps_keeppagesub,wps_subisindex, wps_tagfilter" />
+	value="wps_domain,wps_disabled,wps_subdomainall,wps_themes,wps_pagefilter,wps_arcfilter,wps_nocatbase,wps_redirectold,wps_subpages,wps_subauthors,wps_keeppagesub,wps_subisindex, ,wps_attachment, wps_tagfilter" />
 
 <p class="submit"><input type="submit" name="Submit"
 	value="<?php
@@ -502,6 +513,7 @@ function wps_admin_init(){
 		register_setting( 'wps-settings-group', 'wps_redirectold', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_keeppagesub', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_subisindex', 'wps_filter_on_off');
+		register_setting( 'wps-settings-group', 'wps_attachment', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_arcfilter', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_pagefilter', 'wps_filter_on_off');
 		register_setting( 'wps-settings-group', 'wps_tagfilter', 'wps_filter_on_off');

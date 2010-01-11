@@ -363,4 +363,44 @@ function wps_list_cats ($cat_name, $cat='') {
 	return $cat_name;
 }
 
+
+
+function wps_filter_content_callback($matches) {
+    global $wps_this_subdomain, $wps_subdomains;
+
+    $link = $matches[0];
+    $post_id = get_the_id();
+
+     if ( $wps_this_subdomain && $wps_this_subdomain->archive && $wps_this_subdomain->isPostMember( $post_id ) ) {
+		// Post belongs to subdomain category we're currently on
+		$link = $wps_this_subdomain->changePostLink( $link, $post_id );
+     } elseif ( $subdomain = $wps_subdomains->getPostSubdomain( $post_id ) ) {
+		// Post belongs to another subdomain category
+		$link = $wps_subdomains->cats[$subdomain]->changePostLink( $link, $post_id );
+    }
+    
+    return $link;
+}
+
+/** This function is called when the content is parsed to replace attachment URL*/
+function wps_filter_content($content) {
+  
+   return preg_replace_callback("%(".get_bloginfo('url')."\S*)%", "wps_filter_content_callback", $content);
+}
+
+function wps_filter_attachement_url($link) {
+   global $wps_this_subdomain, $wps_subdomains;
+
+   $post_id = get_the_id();
+
+     if ( $wps_this_subdomain ) {
+		// Post belongs to subdomain category we're currently on
+		$link = $wps_this_subdomain->changePostLink( $link, $post_id );
+     } elseif ( $subdomain = $wps_subdomains->getPostSubdomain( $post_id ) ) {
+		// Post belongs to another subdomain category
+		$link = $wps_subdomains->cats[$subdomain]->changePostLink( $link, $post_id );
+    }
+    
+    return $link;
+}
 ?>

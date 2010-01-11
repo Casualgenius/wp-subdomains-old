@@ -4,11 +4,11 @@
 * Wordpress Info
 
 Plugin Name: WP Subdomains
-Plugin URI: http://webdev.casualgenius.com/projects/wordpress-subdomains/
-Description: Setup your main categories, pages, and authors as subdomains and give them custom themes. Originally based on <a href="http://www.biggnuts.com/wordpress-subdomains-plugin/">Subster Rejunevation</a>.
+Plugin URI: http://projects.casualgenius.com/wordpress-subdomains/
+Description: Setup your main categories, pages, and authors as subdomains and give them custom themes.
 Version: 1.0.0
 Author: Alex Stansfield
-Author URI: http://www.casualgenius.com
+Author URI: http://casualgenius.com
 
 * LICENSE
 
@@ -81,6 +81,7 @@ define( 'WPS_OPT_REDIRECTOLD', 'wps_redirectold' );
 define( 'WPS_OPT_DISABLED', 'wps_disabled' );
 define( 'WPS_OPT_KEEPPAGESUB', 'wps_keeppagesub' );
 define( 'WPS_OPT_SUBISINDEX', 'wps_subisindex' );
+define( 'WPS_OPT_ATTACHMENT', 'wps_attachment' );
 
 class WpsPlugin {
 	
@@ -186,7 +187,12 @@ class WpsPlugin {
 		// Filter for Tag Cloud
 		add_filter( 'widget_tag_cloud_args', 'wps_filter_tag_cloud', 10, 2);
 		add_filter( 'get_terms', 'wps_filter_get_terms', 10, 3);
-		
+
+		//Need for attachment
+        if(get_option( WPS_OPT_ATTACHMENT )) { 
+        	add_filter( 'the_content', 'wps_filter_content');
+		    add_filter( 'wp_get_attachment_url', 'wps_filter_attachement_url');
+		}
 		
 		add_filter( 'pre_option_template', 'wps_change_template' );
 		add_filter( 'pre_option_stylesheet', 'wps_change_template' );
