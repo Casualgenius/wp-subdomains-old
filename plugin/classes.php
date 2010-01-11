@@ -131,8 +131,7 @@ class WpsSubDomains {
 	}
 	
 	function getThisSubdomain() {
-		$url = getenv( 'HTTP_HOST' ) . getenv( 'REQUEST_URI' );
-		//$subdomains = split( "\.", $url );
+		$url = $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'REQUEST_URI' ];
 		$subdomains = explode( ".", $url );
 		$subdomain = $subdomains[0];
 		
