@@ -45,7 +45,7 @@ function wps_get_authors( $exclude_admin = false ) {
 /*
 function sd_posts_where( $where ) {
 	global $wp_query, $wpdb, $csd_timeofchange, $cat;
-	$append = getenv ( "REQUEST_URI" );
+	$append = $_SERVER[ "REQUEST_URI" ];
 	if ( strpos ( $append, "archives/" ) == 1 ) {
 		$matches = array ();
 		
