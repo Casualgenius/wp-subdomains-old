@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: casualgenius
-Donate link: http://projects.casualgenius.com/wordpress-subdomains/donate
+Donate link: http://www.justgiving.com/alex-cycles-vietnam-to-cambodia/
 Tags: subdomains, categories, pages, themes 
 Requires at least: 2.7
 Tested up to: 3.0
@@ -223,17 +223,17 @@ When viewing this subdomain will filter out pages not tied to it.
 == Page Configuration ==
 
 = Subdomain Page =
-To make static pages act like subdomains, create a custom field variable `wps_page_subdomain` and set it to true.
+To make static pages act like subdomains
 
 = Custom Theme = 
-To set a theme for a page subdomain, create a custom field variable `wps_page_theme` and set it to the theme that you want to use. The theme name is the same as you'll find it on the edit categories page. Themes only work for pages that are setup as subdomains.
+To set a theme for a page subdomain. Themes only work for pages that are setup as subdomains.
 
 = Tie a Page to a Category =
-To tie a static page to a subdomained category, so that it displays this URL category.yourdomain.com/static-page, create a custom field variable `wps_tie_to_category` and set it to the category ID.
-If you want this page to still appear on your blog index then set `wps_on_main_index` to true.
+To tie a static page to a subdomained category, so that it displays this URL category.yourdomain.com/static-page, pick the category.
+If you want this page to still appear on your blog index then set Show on Main to yes.
 
 = Show Page on all Categories =
-To make a page show on all pages even if a category is set to only show tied pages, create a custom field varaible called `wps_showall` and set it to true.
+To make a page show on all pages even if a category is set to only show tied pages.
 
 == Notes ==
 
