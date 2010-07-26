@@ -44,7 +44,7 @@ function wps_upgrade($current_version) {
 	global $wpdb;
 	
 	$table_name = $wpdb->prefix . "category_subdomains";
-	
+
 	//--- Run upgrades based on current version
 	switch ($current_version) {
 		case '' :
@@ -86,6 +86,20 @@ function wps_upgrade($current_version) {
 			break;
 	}
 	
+	// Above Method is flawed so using this for now.
+	if (version_compare($current_version, '1.0.0', '<')) {
+		// Update meta values from 'true' to 1
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_value = '1' WHERE meta_key = 'wps_page_subdomain' and meta_value = 'true'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_value = '1' WHERE meta_key = 'wps_showall' and meta_value = 'true'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_value = '1' WHERE meta_key = 'wps_on_main_index' and meta_value = 'true'");
+		
+		// Update meta names so they are hidden
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_key = '_wps_page_theme' WHERE meta_key = 'wps_page_theme'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_key = '_wps_page_subdomain' WHERE meta_key = 'wps_page_subdomain'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_key = '_wps_tie_to_category' WHERE meta_key = 'wps_tie_to_category'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_key = '_wps_showall' WHERE meta_key = 'wps_showall'");
+		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_key = '_wps_on_main_index' WHERE meta_key = 'wps_on_main_index'");
+	}
 }
 
 ?>

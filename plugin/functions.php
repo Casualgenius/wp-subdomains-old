@@ -26,7 +26,7 @@ function wps_domain() {
 function wps_showall_pages() {
 	global $wpdb, $wps_page_metakey_showall;
 	
-	$pages = $wpdb->get_col ( "SELECT Post_ID FROM {$wpdb->postmeta} WHERE meta_key = '{$wps_page_metakey_showall}' and meta_value = 'true'" );
+	$pages = $wpdb->get_col ( "SELECT Post_ID FROM {$wpdb->postmeta} WHERE meta_key = '{$wps_page_metakey_showall}' and meta_value = '1'" );
 	
 	return $pages;
 }

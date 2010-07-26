@@ -3,7 +3,7 @@ Contributors: casualgenius
 Donate link: http://projects.casualgenius.com/wordpress-subdomains/donate
 Tags: subdomains, categories, pages, themes 
 Requires at least: 2.7
-Tested up to: 2.9
+Tested up to: 3.0
 Stable tag: 0.6.9
 
 WP Subdomains is a plugin for Wordpress that allows you to setup your main categories, pages and authors as subdomains.
@@ -61,6 +61,7 @@ Added Features
 
 * Tag Cloud now filtered properly
 * Tag Filtering in Loop by setting $wps_filter_tags_in_loop to true in subdomains.php
+* Page meta data edited with meta boxes
 * Attachments on Subdomains - Thanks to Alban
 
 Bug Fixes

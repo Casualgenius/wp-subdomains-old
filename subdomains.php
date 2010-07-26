@@ -48,11 +48,11 @@ require_once ('widgets/categories.php');
 global $wps_subdomains, $wps_this_subdomain, $wps_showall_pages;
 
 // User Settings
-$wps_page_metakey_theme = 'wps_page_theme';
-$wps_page_metakey_subdomain = 'wps_page_subdomain';
-$wps_page_metakey_tie = 'wps_tie_to_category';
-$wps_page_metakey_showall = 'wps_showall';
-$wps_page_on_main_index = 'wps_on_main_index';
+$wps_page_metakey_theme = '_wps_page_theme';
+$wps_page_metakey_subdomain = '_wps_page_subdomain';
+$wps_page_metakey_tie = '_wps_tie_to_category';
+$wps_page_metakey_showall = '_wps_showall';
+$wps_page_on_main_index = '_wps_on_main_index';
 $wps_filter_tags_in_loop = false;
 
 // Plugin Stuff
@@ -146,11 +146,16 @@ class WpsPlugin {
 		add_action( 'parse_query', 'wps_action_parse_query' );
 		
 		// If newer version of Wordpress use action method for adding Subdomain options to Edit Category
-		if ($wp_version >= '2.8.3') {
+		if (version_compare($wp_version, '2.8.3', '>=')) {
 			add_action( 'edit_category_form_fields', 'wps_action_edit_category' );
 		}
 		
+		// Add Meta Boxes to Page edit
 		add_action( 'do_meta_boxes', 'wps_action_page_meta', 10, 3);
+		
+		// Save Meta Boxes
+		add_action('save_post', 'wps_action_page_meta_save');
+		
 	}
 	
 	function addFilters() {
@@ -169,7 +174,7 @@ class WpsPlugin {
 		
 		
 		// If older version of Wordpress use Javascript method for adding Subdomain options to Edit Category
-		if ($wp_version < '2.8.3') {
+		if (version_compare($wp_version, '2.8.3', '<')) {
 			add_filter( 'admin_footer', 'wps_admin_footer' );
 		}
 		
@@ -188,7 +193,7 @@ class WpsPlugin {
 		add_filter( 'widget_tag_cloud_args', 'wps_filter_tag_cloud', 10, 2);
 		add_filter( 'get_terms', 'wps_filter_get_terms', 10, 3);
 
-		//Need for attachment
+		// Need for attachment
         if(get_option( WPS_OPT_ATTACHMENT )) { 
         	add_filter( 'the_content', 'wps_filter_content');
 		    add_filter( 'wp_get_attachment_url', 'wps_filter_attachement_url');

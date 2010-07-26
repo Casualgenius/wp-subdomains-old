@@ -88,7 +88,6 @@ function wps_edit_category() {
 }
 
 function wps_action_edit_category ($category) {
-// FIXME: find out when this action was introduced
 	global $wpdb;
 	
 	$themes = get_themes ();
@@ -205,14 +204,14 @@ function wps_page_meta_box($post) {
 ?>
 <table>
 <tr><td style="width: 60%">
-<label for="wps_page_subdomain">
+<label for="<?php echo $wps_page_metakey_subdomain; ?>">
 Make the Page a subdomain?
 </label>
 </td><td>
-<select style="width: 95%" name="wps_page_subdomain" id="wps_page_subdomain">
+<select style="width: 95%" name="<?php echo $wps_page_metakey_subdomain; ?>" id="<?php echo $wps_page_metakey_subdomain; ?>">
 <option value="0">No</option>
 <?php 
-	if ($page_meta[$wps_page_metakey_subdomain] == true) {
+	if ($page_meta[$wps_page_metakey_subdomain] == 1) {
 		print '<option selected="selected" value="1">Yes</option>';
 	} else {
 		print '<option value="1">Yes</option>';
@@ -221,11 +220,11 @@ Make the Page a subdomain?
 </select>
 </td></tr>
 <tr><td>
-<label for="wps_page_theme">
+<label for="<?php echo $wps_page_metakey_theme; ?>">
 Select Custom Theme
 </label>
 </td><td>
-<select style="width: 95%" name="wps_page_theme" id="wps_page_theme">
+<select style="width: 95%" name="<?php echo $wps_page_metakey_theme; ?>" id="<?php echo $wps_page_metakey_theme; ?>">
 <option value="">-- None --</option>
 <?php 
 foreach ($themes as $theme) {
@@ -239,11 +238,11 @@ foreach ($themes as $theme) {
 </select>
 </td></tr>
 <tr><td>
-<label for="wps_page_tied">
+<label for="<?php echo $wps_page_metakey_tie; ?>">
 Tie Page to Category Subdomain
 </label>
 </td><td>
-<select style="width: 95%" name="wps_page_tied" id="wps_page_tied">
+<select style="width: 95%" name="<?php echo $wps_page_metakey_tie; ?>" id="<?php echo $wps_page_metakey_tie; ?>">
 <option value="">-- None --</option>
 <?php 
 foreach ($subdomain_cats as $cat_id => $cat_name) {
@@ -257,14 +256,14 @@ foreach ($subdomain_cats as $cat_id => $cat_name) {
 </select>
 </td></tr>
 <tr><td>
-<label for="wps_page_main_index">
-If page is tied still show on Blog index
+<label for="<?php echo $wps_page_on_main_index; ?>">
+Still show on Blog index when tied
 </label>
 </td><td>
-<select style="width: 95%" name="wps_page_main_index" id="wps_page_main_index">
+<select style="width: 95%" name="<?php echo $wps_page_on_main_index; ?>" id="<?php echo $wps_page_on_main_index; ?>">
 <option value="0">No</option>
 <?php 
-	if ($page_meta[$wps_page_on_main_index] == true) {
+	if ($page_meta[$wps_page_on_main_index] == 1) {
 		print '<option selected="selected" value="1">Yes</option>';
 	} else {
 		print '<option value="1">Yes</option>';
@@ -273,14 +272,14 @@ If page is tied still show on Blog index
 </select>
 </td></tr>
 <tr><td>
-<label for="wps_page_showall">
-Make Page show on Subdomains that show only tied pages.
+<label for="<?php echo $wps_page_metakey_showall; ?>">
+Show on Subdomains that show only tied pages.
 </label>
 </td><td>
-<select style="width: 95%" name="wps_page_showall" id="wps_page_showall">
+<select style="width: 95%" name="<?php echo $wps_page_metakey_showall; ?>" id="<?php echo $wps_page_metakey_showall; ?>">
 <option value="0">No</option>
 <?php 
-	if ($page_meta[$wps_page_metakey_showall] == true) {
+	if ($page_meta[$wps_page_metakey_showall] == 1) {
 		print '<option selected="selected" value="1">Yes</option>';
 	} else {
 		print '<option value="1">Yes</option>';
@@ -289,7 +288,45 @@ Make Page show on Subdomains that show only tied pages.
 </select>
 </td></tr>
 </table>
-
+<input type="hidden" name="nonce-wpspage-edit" value="<?php echo wp_create_nonce('edit-wpspage-nonce') ?>" />
 <?php 
 }
+
+function wps_action_page_meta_save ($id) {
+	global $wps_page_metakey_theme, $wps_page_metakey_subdomain, $wps_page_metakey_tie, $wps_page_metakey_showall, $wps_page_on_main_index;
+	
+	$nonce = $_POST['nonce-wpspage-edit'];
+
+	if (wp_verify_nonce($nonce, 'edit-wpspage-nonce')) {
+		$theme = $_POST[$wps_page_metakey_theme];
+		$subdomain = $_POST[$wps_page_metakey_subdomain];
+		$tie = $_POST[$wps_page_metakey_tie];
+		$showall = $_POST[$wps_page_metakey_showall];
+		$mainindex = $_POST[$wps_page_on_main_index];
+		
+		delete_post_meta($id, $wps_page_metakey_theme);
+		delete_post_meta($id, $wps_page_metakey_subdomain);
+		delete_post_meta($id, $wps_page_metakey_tie);
+		delete_post_meta($id, $wps_page_metakey_showall);
+		delete_post_meta($id, $wps_page_on_main_index);
+		
+		if (isset($theme) && !empty($theme)) {
+			add_post_meta($id, $wps_page_metakey_theme, $theme);
+		}
+		if (isset($subdomain) && !empty($subdomain)) {
+			add_post_meta($id, $wps_page_metakey_subdomain, $subdomain);
+		}
+		if (isset($tie) && !empty($tie)) {
+			add_post_meta($id, $wps_page_metakey_tie, $tie);
+		}
+		if (isset($showall) && !empty($showall)) {
+			add_post_meta($id, $wps_page_metakey_showall, $showall);
+		}
+		if (isset($mainindex) && !empty($mainindex)) {
+			add_post_meta($id, $wps_page_on_main_index, $mainindex);
+		}
+		
+	}
+}
+
 ?>

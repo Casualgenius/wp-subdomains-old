@@ -14,7 +14,7 @@ function wps_page_rows( $pages ) {
 			$rows .= '<tr>';
 		}
 		
-		$rows .= '<td><b><a href="page.php?action=edit&amp;post=' . $page ['ID'] . '">' . $page ['title'] . '</a></b></td>';
+		$rows .= '<td><b><a href="' . get_edit_post_link($page ['ID']) . '">' . $page ['title'] . '</a></b></td>';
 		$rows .= '<td>' . ($page [$wps_page_metakey_subdomain] ? 'Yes' : 'No') . '</td>';
 		$rows .= '<td>' . ($page [$wps_page_metakey_theme] ? $page [$wps_page_metakey_theme] : 'None') . '</td>';
 		$rows .= '<td>' . ($page ['category'] ? $page ['category'] : 'None') . '</td>';
@@ -25,7 +25,7 @@ function wps_page_rows( $pages ) {
 }
 
 function wps_category_rows( $cats, $subdomains = 0 ) {
-	
+	global $wp_version;
 	$count = 0;
 	$rows = '';
 	
@@ -38,8 +38,13 @@ function wps_category_rows( $cats, $subdomains = 0 ) {
 				$rows .= '<tr>';
 			}
 			
-			//$rows .= '<td><b><a href="categories.php?action=edit&_wp_http_referer=index.php&_wp_original_http_referer=index.php&cat_ID=' . $cat['ID'] . '">' . $cat['name'] . '</a></b></td>';
-			$rows .= '<td><b><a href="categories.php?action=edit&cat_ID=' . $cat ['ID'] . '">' . $cat ['name'] . '</a></b></td>';
+			// From WP 3.0 links changed so use get_edit_tag_link (doesn't work is some earlier versions)
+			if (version_compare($wp_version, '3.0', '<')) {
+				$rows .= '<td><b><a href="categories.php?action=edit&cat_ID=' . $cat ['ID'] . '">' . $cat ['name'] . '</a></b></td>';
+			} else {
+				$rows .= '<td><b><a href="' . get_edit_tag_link($cat ['ID'], 'category') . '">' . $cat ['name'] . '</a></b></td>';
+			}
+			
 			$rows .= '<td>' . $cat ['slug'] . '</td>';
 			if ( $subdomains ) {
 				$rows .= '<td>' . ($cat ['theme'] ? $cat ['theme'] : 'None') . '</td>';

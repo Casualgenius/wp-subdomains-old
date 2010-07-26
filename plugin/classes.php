@@ -42,7 +42,7 @@ class WpsSubDomains {
 			//--- Get Pages that are to be Subdomains
 			//$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . $wps_page_metakey_subdomain . '&meta_value=true' );
 			//$pages = get_pages( 'meta_key=' . $wps_page_metakey_subdomain . '&meta_value=true' );
-			$pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_metakey_subdomain."' and meta_value = 'true'");
+			$pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_metakey_subdomain."' and meta_value = '1'");
 			
 			//--- Create Page Subdomains
 			foreach ( $pages as $page ) {
@@ -186,7 +186,7 @@ class WpsSubDomains {
 			
 			//$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
 			//$pages = get_pages( 'meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
-			$pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_on_main_index."' and meta_value = 'true'");
+			$pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_on_main_index."' and meta_value = '1'");
 			
 			foreach ($pages as $page) {
 				/*
