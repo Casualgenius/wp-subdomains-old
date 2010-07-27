@@ -58,11 +58,20 @@ function wps_redirect () {
 
 //--- Save Category settings
 function wps_edit_category() {
+	global $wp_version;
 	// Check we have a category id
-	if (!isset($_REQUEST['cat_ID'])) {
-		return;
+	if (version_compare($wp_version, '3.0', '<')) {
+		if (!isset($_REQUEST['cat_ID'])) {
+			return;
+		} else {
+			$cat_id = $_REQUEST['cat_ID'];
+		}
 	} else {
-		$cat_id = $_REQUEST['cat_ID'];
+		if (!isset($_REQUEST['tag_ID'])) {
+			return;
+		} else {
+			$cat_id = $_REQUEST['tag_ID'];
+		}
 	}
 	
 	global $wpdb;

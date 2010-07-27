@@ -158,7 +158,7 @@ Note, some hosting services allow a forward all rule that will forward all subdo
 
 For each Category you want to convert, edit the category in wordpress admin and enable the "Make Subdomain" option.
 
-For each Page you want to convert, edit the page in wordpress admin and add the custom field `wps_page_subdomain` with value "true"
+For each Page you want to convert, edit the page in wordpress admin set "Make the Page a subdomain" to "Yes" 
 
 For Author subdomains just switch enable the "Activate Author Subdomains" setting. You cannot pick and choose which authors are subdomains. 
 It is either all or none.

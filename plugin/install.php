@@ -87,7 +87,7 @@ function wps_upgrade($current_version) {
 	}
 	
 	// Above Method is flawed so using this for now.
-	if (version_compare($current_version, '1.0.0', '<')) {
+	if (version_compare($current_version, '1.0.1', '<')) {
 		// Update meta values from 'true' to 1
 		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_value = '1' WHERE meta_key = 'wps_page_subdomain' and meta_value = 'true'");
 		$wpdb->query("UPDATE ".$wpdb->postmeta." SET meta_value = '1' WHERE meta_key = 'wps_showall' and meta_value = 'true'");

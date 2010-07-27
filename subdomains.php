@@ -62,7 +62,7 @@ $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
-define( 'WPS_VERSION', '1.0.0' );
+define( 'WPS_VERSION', '1.0.1' );
 define( 'WPS_WP_VERSION_MIN', '2.7.0');
 define( 'WPS_TYPE_CAT', 1 );
 define( 'WPS_TYPE_PAGE', 2 );
@@ -225,7 +225,7 @@ class WpsPlugin {
 }
 
 //--- Register the Activation Hook
-register_activation_hook( 'wordpress-subdomains/subdomains.php', 'wps_install' );
+register_activation_hook( __FILE__, 'wps_install' );
 
 //--- Run the Plugin
 global $WpsPlugin;
