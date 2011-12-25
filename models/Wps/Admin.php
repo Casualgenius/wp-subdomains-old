@@ -2,11 +2,15 @@
 
 class Wps_Admin
 {
-
-    function wps_page_rows ($pages)
+    protected $_plugin;
+    
+    public function __construct(Wps_Plugin $plugin)
     {
-        global $wps_page_metakey_subdomain, $wps_page_metakey_theme;
-        
+        $this->_plugin = $plugin;
+    }
+    
+    protected function _getPageRows($pages)
+    {
         $count = 0;
         $rows = '';
         
@@ -19,8 +23,8 @@ class Wps_Admin
             }
             
             $rows .= '<td><b><a href="' . get_edit_post_link($page['ID']) . '">' . $page['title'] . '</a></b></td>';
-            $rows .= '<td>' . ($page[$wps_page_metakey_subdomain] ? 'Yes' : 'No') . '</td>';
-            $rows .= '<td>' . ($page[$wps_page_metakey_theme] ? $page[$wps_page_metakey_theme] : 'None') . '</td>';
+            $rows .= '<td>' . ($page[Wps_Plugin::METAKEY_SUBDOMAIN] ? 'Yes' : 'No') . '</td>';
+            $rows .= '<td>' . ($page[Wps_Plugin::METAKEY_THEME] ? $page[Wps_Plugin::METAKEY_THEME] : 'None') . '</td>';
             $rows .= '<td>' . ($page['category'] ? $page['category'] : 'None') . '</td>';
             $rows .= '</tr>';
         }
@@ -28,9 +32,8 @@ class Wps_Admin
         return $rows;
     }
 
-    function wps_category_rows ($cats, $subdomains = 0)
+    protected function _getCategoryRows($cats, $subdomains = 0)
     {
-        global $wp_version;
         $count = 0;
         $rows = '';
         
@@ -43,14 +46,9 @@ class Wps_Admin
                     $rows .= '<tr>';
                 }
                 
-                // From WP 3.0 links changed so use get_edit_tag_link (doesn't work is some earlier versions)
-                if (version_compare($wp_version, '3.0', '<')) {
-                    $rows .= '<td><b><a href="categories.php?action=edit&cat_ID=' . $cat['ID'] . '">' . $cat['name'] .
-                     '</a></b></td>';
-                } else {
-                    $rows .= '<td><b><a href="' . get_edit_tag_link($cat['ID'], 'category') . '">' . $cat['name'] .
-                     '</a></b></td>';
-                }
+                // From WP 3.0 links changed so use get_edit_tag_link
+                $rows .= '<td><b><a href="' . get_edit_tag_link($cat['ID'], 'category') . '">' . $cat['name'] .
+                    '</a></b></td>';
                 
                 $rows .= '<td>' . $cat['slug'] . '</td>';
                 if ($subdomains) {
@@ -64,15 +62,14 @@ class Wps_Admin
         return $rows;
     }
 
-    function wps_settings_plugin ()
+    function getAdminPageSettings ()
     {
-        global $wps_page_metakey_theme, $wps_page_metakey_tie;
         ?>
 <div class="wrap">
 	<h2><?php
         _e('Plugin Settings', 'wpro')?></h2>
     
-    <?php print(wps_admin_notices()); ?>
+    <?php print($this->_getAdminNotices()); ?>
     
     <form method="post" action="options.php">
     <?php
@@ -92,7 +89,7 @@ class Wps_Admin
         _e('Main Domain')?></th>
 				<td><input type="text" name="wps_domain"
 					value="<?php
-        echo get_option(WPS_OPT_DOMAIN)?>" /> <span
+        echo get_option(Wps_Plugin::OPTION_DOMAIN)?>" /> <span
 					class="setting-description">If the Main Blog is located on a
 						subdomain (e.g. http://blog.mydomain.com/), enter the Domain here
 						(e.g. mydomain.com).</span></td>
@@ -105,7 +102,7 @@ class Wps_Admin
 					value="<?php
         echo WPS_CHK_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_DISABLED));
+        checked(WPS_CHK_ON, get_option(Wps_Plugin::OPTION_DISABLED));
         ?> /> <span class="setting-description">This will disable the
 						plugin's functionality whilst allowing you to continue configuring
 						it.</span></td>
@@ -118,7 +115,7 @@ class Wps_Admin
 					value="<?php
         echo WPS_CHK_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_SUBALL));
+        checked(WPS_CHK_ON, get_option(Wps_Plugin::OPTION_SUBALL));
         ?> /> <span class="setting-description">This will turn all main
 						Categories into Subdomains.<br /> You can select to exclude
 						categories from this by <a href="admin.php?page=wps_categories">editing
@@ -163,7 +160,7 @@ class Wps_Admin
 						href="admin.php?page=wps_categories">Edit them</a>.<br /> <br />
 						You can also set different themes for each static subdomained
 						page. Just set the custom field <b><?php
-        echo $wps_page_metakey_theme;
+        echo Wps_Plugin::METAKEY_THEME;
         ?></b> to the theme that you want to use. These theme names are the
 						same ones given in the Edit Categories page.
 				</span></td>
@@ -272,7 +269,7 @@ class Wps_Admin
         ?> /> <span class="setting-description">Activate the Page filtering
 						system. Use this to be able tie pages to categories.<br /> You tie
 						a page by setting custom field <b><?php
-        echo $wps_page_metakey_tie;
+        echo Wps_Plugin::METAKEY_TIE;
         ?></b> to the ID number of the category.
 				</span></td>
 			</tr>
@@ -306,14 +303,14 @@ class Wps_Admin
 <?php
     }
 
-    function wps_settings_categories ()
+    function getAdminPageCategories ()
     {
-        global $wpdb, $wps_subdomains;
+        global $wpdb;
         
         $categories = array();
         
         // Build Cat Subdomain array (link, name, slug, theme, tied)
-        foreach ($wps_subdomains->cats as $catID => $cat) {
+        foreach ($this->_plugin->getSubdomains()->cats as $catID => $cat) {
             $categories['subdomains'][$catID]['ID'] = $catID;
             $categories['subdomains'][$catID]['name'] = $cat->name;
             $categories['subdomains'][$catID]['slug'] = $cat->slug;
@@ -321,7 +318,7 @@ class Wps_Admin
             $categories['subdomains'][$catID]['filter_pages'] = $cat->filter_pages;
         }
         
-        $cats_nosub = wps_getNonSubCats();
+        $cats_nosub = $this->_plugin->getSubdomains()->getNonSubCategories();
         
         if (! empty($cats_nosub)) {
             $tmp_cats = get_categories('hide_empty=0&include=' . implode(',', $cats_nosub));
@@ -337,7 +334,7 @@ class Wps_Admin
         }
         
         // Determine if MakeAllSubdomain is set.
-        $suball = (get_option(WPS_OPT_SUBALL) != "");
+        $suball = (get_option(Wps_Plugin::OPTION_SUBALL) != "");
         
         ?>
 <div class="wrap">
@@ -345,7 +342,7 @@ class Wps_Admin
         _e('Categories', 'wpro')?></h2>
 	<p>
     
-    <?php print(wps_admin_notices()); ?>
+    <?php print($this->_getAdminNotices()); ?>
     
     <?php
         if ($suball) {
@@ -367,7 +364,7 @@ class Wps_Admin
 		</thead>
 		<tbody>
     <?php
-        print(wps_category_rows($categories['subdomains'], 1));
+        print($this->_getCategoryRows($categories['subdomains'], 1));
         ?>
     </tbody>
 	</table>
@@ -384,7 +381,7 @@ class Wps_Admin
 		</thead>
 		<tbody>
     <?php
-        print(wps_category_rows($categories['non_subdomains'], 0));
+        print($this->_getCategoryRows($categories['non_subdomains'], 0));
         ?>
     </tbody>
 	</table>
@@ -392,11 +389,11 @@ class Wps_Admin
 <?php
     }
 
-    function wps_settings_pages ()
+    function getAdminPagePages ()
     {
-        global $wpdb, $wps_page_metakey_theme, $wps_page_metakey_subdomain, $wps_page_metakey_tie;
+        global $wpdb;
         
-        $meta_keys = array($wps_page_metakey_theme, $wps_page_metakey_subdomain, $wps_page_metakey_tie);
+        $meta_keys = array(Wps_Plugin::METAKEY_THEME, Wps_Plugin::METAKEY_SUBDOMAIN, Wps_Plugin::METAKEY_TIE);
         
         $sql = "SELECT Post_ID, meta_key, meta_value FROM {$wpdb->postmeta} WHERE meta_key in ('" .
          implode("','", $meta_keys) . "') and meta_value != ''";
@@ -419,8 +416,8 @@ class Wps_Admin
                 $page['ID'] = $pageid;
                 $page['title'] = $pageobj->post_title;
                 
-                if ($page[$wps_page_metakey_tie]) {
-                    $page_cat = get_category($page[$wps_page_metakey_tie]);
+                if ($page[Wps_Plugin::METAKEY_TIE]) {
+                    $page_cat = get_category($page[Wps_Plugin::METAKEY_TIE]);
                     $page['category'] = $page_cat->cat_name;
                 }
                 
@@ -438,7 +435,7 @@ class Wps_Admin
 	<h2><?php
         _e('Pages', 'wpro')?></h2>
     
-    <?php print(wps_admin_notices()); ?>
+    <?php print($this->_getAdminNotices()); ?>
     
     <p>A list of main Pages that are configured to use WP Subdomains
 		features.</p>
@@ -453,7 +450,7 @@ class Wps_Admin
 		</thead>
 		<tbody>
     <?php
-        print(wps_page_rows($pages_root));
+        print($this->_getPageRows($pages_root));
         ?>
     </tbody>
 	</table>
@@ -473,7 +470,7 @@ class Wps_Admin
 		</thead>
 		<tbody>
     <?php
-        print(wps_page_rows($pages_child));
+        print($this->_getPageRows($pages_child));
         ?>
     </tbody>
 	</table>
@@ -481,14 +478,14 @@ class Wps_Admin
 <?php
     }
 
-    function wps_settings_welcome ()
+    function getAdminPageWelcome ()
     {
         ?>
 <div class="wrap">
 	<h2><?php
         _e('WP Subdomains', 'wpro')?></h2>
     
-    <?php print(wps_admin_notices()); ?>
+    <?php print($this->_getAdminNotices()); ?>
     
     <p>This plugin was developed to make it easy for people to setup
 		subdomains that point directly to categories or pages on their
@@ -542,32 +539,28 @@ class Wps_Admin
 
     function wps_add_options ()
     {
-        $file = 'wp-subdomains/plugin/admin.php';
-        //$file = __FILE__;
-        add_menu_page('WP Subdomains', 'WP Subdomains', 7, $file, 'wps_settings_welcome');
-        add_submenu_page($file, 'Categories', 'Categories', 7, 'wps_categories', 'wps_settings_categories');
-        add_submenu_page($file, 'Pages', 'Pages', 7, 'wps_pages', 'wps_settings_pages');
-        add_submenu_page($file, 'Settings', 'Settings', 7, 'wps_settings', 'wps_settings_plugin');
+        add_menu_page('WP Subdomains', 'WP Subdomains', 7, 'wps-admin', array($this, 'getAdminPageWelcome'));
+        add_submenu_page('wps-admin', 'Categories', 'Categories', 7, 'categories', array($this, 'getAdminPageCategories'));
+        add_submenu_page('wps-admin', 'Pages', 'Pages', 7, 'pages', array($this, 'getAdminPagePages'));
+        add_submenu_page('wps-admin', 'Settings', 'Settings', 7, 'settings', array($this, 'getAdminPageSettings'));
     }
 
     function wps_admin_init ()
     {
-        if (function_exists('register_setting')) {
-            // this whitelists form elements on the options page
-            register_setting('wps-settings-group', 'wps_domain');
-            register_setting('wps-settings-group', 'wps_disabled', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_subdomainall', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_subpages', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_subauthors', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_themes', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_redirectold', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_keeppagesub', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_subisindex', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_attachment', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_arcfilter', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_pagefilter', 'wps_filter_on_off');
-            register_setting('wps-settings-group', 'wps_tagfilter', 'wps_filter_on_off');
-        }
+        // this whitelists form elements on the options page
+        register_setting('wps-settings-group', 'wps_domain');
+        register_setting('wps-settings-group', 'wps_disabled', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_subdomainall', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_subpages', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_subauthors', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_themes', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_redirectold', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_keeppagesub', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_subisindex', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_attachment', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_arcfilter', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_pagefilter', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_tagfilter', 'wps_filter_on_off');
     }
 
     function wps_filter_on_off ($data)
@@ -576,5 +569,30 @@ class Wps_Admin
             return WPS_CHK_ON;
         }
         return '';
+    }
+    
+    //--- Notices for the Admin regarding things that will stop the plugin operating
+    protected function _getAdminNotices() {
+        global $wp_version;
+    
+        $notices = '';
+    
+        // Is the Plugin Disabled? Notify the Admin
+        if (get_option(Wps_Plugin::OPTION_DISABLED) != '') {
+            $notices .= '<h3>Note: you currently have the plugin set as DISABLED.</h3>';
+        }
+    
+        // Are permalinks not configured? Notify the Admin
+        if (! $this->_plugin->isPermalinkSet()) {
+            $notices .= '<h3>Warning: you do not have permalinks configured so this plugin cannot operate.</h3>';
+        }
+    
+        // Is Wordpress version supported?
+        if ($wp_version < Wps_Plugin::WP_VERSION_MIN) {
+            $notices .= '<h3>Warning: This version of Wordpress ('.$wp_version.') is unsupported so this plugin may not work.</h3>';
+            $notices .= '<h3>If you encounter problems try Wordpress Version '.WPS_WP_VERSION_MIN.' or above.</h3>';
+        }
+    
+        return $notices;
     }
 }

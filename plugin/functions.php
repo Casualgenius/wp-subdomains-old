@@ -116,31 +116,6 @@ function wps_redirect_canonical( $redirect_url, $requested_url ) {
 	return $redirect_url;
 }
 
-//--- Notices for the Admin regarding things that will stop the plugin operating
-function wps_admin_notices() {
-	global $wps_permalink_set, $wp_version;
-
-	$notices = '';
-	
-	// Is the Plugin Disabled? Notify the Admin
-	if (get_option(WPS_OPT_DISABLED) != '') {
-		$notices .= '<h3>Note: you currently have the plugin set as DISABLED.</h3>';
-	}
-	
-	// Are permalinks not configured? Notify the Admin
-	if (!$wps_permalink_set) {
-		$notices .= '<h3>Warning: you do not have permalinks configured so this plugin cannot operate.</h3>';	
-	}
-
-	// Is Wordpress version supported?
-	if ($wp_version < WPS_WP_VERSION_MIN) {
-		$notices .= '<h3>Warning: This version of Wordpress ('.$wp_version.') is unsupported so this plugin may not work.</h3>';
-		$notices .= '<h3>If you encounter problems try Wordpress Version '.WPS_WP_VERSION_MIN.' or above.</h3>';
-	}
-	
-	return $notices;
-}
-
 function getPageChildren($pageID) {
 	$childrenARY = array();
 	

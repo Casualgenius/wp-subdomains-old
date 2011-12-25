@@ -4,6 +4,8 @@ class Wps_Plugin
 {
     const VERSION = '2.0.0';
     
+    const WP_VERSION_MIN = '3.0.0';
+    
     const METAKEY_THEME = '_wps_page_theme';
     const METAKEY_SUBDOMAIN = '_wps_page_subdomain';
     const METAKEY_TIE = '_wps_tie_to_category';
@@ -40,6 +42,11 @@ class Wps_Plugin
      * @var Wps_Subdomain
      */
     protected $_subdomain;
+    
+    /**
+     * @var Wps_Admin
+     */
+    protected $_admin;
     
     /**
      * @var Wps_Hooks_Actions
@@ -82,27 +89,20 @@ class Wps_Plugin
         // grab This Subdomain object (if we're on one)
         $this->_subdomain = $this->_subdomains->getThisSubdomain();
         
-        // add Admin Menu Pages
-        add_action('admin_menu', 'wps_add_options');
+        // add the admin section
+        $this->_addAdmin();
         
         // If the permalink is configured then we can setup everything else
         if ($this->isPermalinkSet() && (get_option(self::OPTION_DISABLED) == '')) {
             // add the Actions
-            $this->_actions = new Wps_Hooks_Actions($this);
             $this->_addActions();
             
             // add the rewrite rules
-            $this->_rewriteRules = new Wps_Hooks_RewriteRules($this);
             $this->_addRewriteRules();
             
             // add the Filters
-            $this->_filters = new Wps_Hooks_Filters($this);
             $this->_addFilters();
         }
-        
-        // this action can't be in addActions because the admin interface
-        // doesn't work without it.
-        add_action('admin_init', 'wps_admin_init');
     }
 
     public function getSubdomain ()
@@ -150,9 +150,22 @@ class Wps_Plugin
         
         return $this->_permalinkSet;
     }
+    
+    protected function _addAdmin()
+    {
+        $this->_admin = new Wps_Admin($this);
+        
+        // add Admin Menu Pages
+        add_action('admin_menu', array($this->_admin, 'wps_add_options'));
+        
+        // add Admin Init
+        add_action('admin_init', array($this->_admin, 'wps_admin_init'));
+    }
 
     protected function _addActions ()
     {
+        $this->_actions = new Wps_Hooks_Actions($this);
+        
         add_action('init', array($this->_actions, 'wps_init'), 2);
         
         // Only redirect pages when not in admin section
@@ -176,6 +189,8 @@ class Wps_Plugin
 
     protected function _addRewriteRules ()
     {
+        $this->_rewriteRules = new Wps_Hooks_RewriteRules($this);
+        
         add_filter('rewrite_rules_array', array($this->_rewriteRules, 'wps_rewrite_rules'));
         add_filter('root_rewrite_rules', array($this->_rewriteRules, 'wps_root_rewrite_rules'));
         add_filter('post_rewrite_rules', array($this->_rewriteRules, 'wps_post_rewrite_rules'));
@@ -188,6 +203,7 @@ class Wps_Plugin
     
     protected function _addFilters ()
     {
+        $this->_filters = new Wps_Hooks_Filters($this);
         
         // Filters for Adjacent Posts
         // FIXME: Check args getting through

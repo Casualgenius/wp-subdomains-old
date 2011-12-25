@@ -19,7 +19,7 @@ class Wps_Widgets_Sitelist
         if (! function_exists('register_sidebar_widget'))
             return;
         
-        $widget = new WpsSitelistWidget();
+        $widget = new Wps_Widgets_Sitelist();
         
         // This registers our widget so it appears with the other available
         // widgets and can be dragged and dropped into any active sidebars.

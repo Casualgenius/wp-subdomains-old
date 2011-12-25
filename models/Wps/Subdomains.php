@@ -9,7 +9,7 @@ class Wps_Subdomains {
     //var $cats_nosub = array();
     var $pages_on_index = false;
     
-    function WpsSubDomains() {
+    function __construct() {
         global $wpdb, $wps_page_metakey_subdomain;
     
         $table_name = $wpdb->prefix . "category_subdomains";
@@ -34,7 +34,7 @@ class Wps_Subdomains {
     
         //--- Create Category Subdomains
         foreach ( $cats as $cat ) {
-            $this->cats[$cat] = new WpsSubDomainCat( $cat );
+            $this->cats[$cat] = new Wps_Subdomain_Category($cat);
         }
     
         //--- Subdomain Pages if option is turned on
@@ -45,9 +45,8 @@ class Wps_Subdomains {
             $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_metakey_subdomain."' and meta_value = '1'");
             	
             //--- Create Page Subdomains
-            foreach ( $pages as $page ) {
-                //$this->pages[$page->ID] = new WpsSubDomainPage( $page );
-                $this->pages[$page] = new WpsSubDomainPage( $page );
+            foreach ($pages as $page) {
+                $this->pages[$page] = new Wps_Subdomain_Page($page);
             }
         }
     
@@ -58,7 +57,7 @@ class Wps_Subdomains {
             	
             //--- Create Author Subdomains
             foreach ( $authors as $author ) {
-                $this->authors[$author->ID] = new WpsSubDomainAuthor( $author );
+                $this->authors[$author->ID] = new Wps_Subdomain_Author( $author );
             }
         }
     
@@ -186,7 +185,7 @@ class Wps_Subdomains {
             	
             //$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
             //$pages = get_pages( 'meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
-            $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_on_main_index."' and meta_value = '1'");
+            $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '" . Wps_Plugin::METAKEY_ONMAININDEX . "' and meta_value = '1'");
             	
             foreach ($pages as $page) {
                 /*
@@ -220,5 +219,11 @@ class Wps_Subdomains {
         } else {
             return false;
         }
+    }
+    
+    public function getNonSubCategories() {
+        $cats_root = get_terms( 'category', 'hide_empty=0&parent=0&fields=ids' );
+    
+        return array_diff($cats_root, array_keys($this->cats));
     }
 }
