@@ -65,11 +65,11 @@ class Wps_Hooks_Activation
                 update_option('csd_pagefilter_on', (get_option('sr_pagefilter_on') ? get_option('sr_pagefilter_on') : ''));
             case '0.5.0':
                 // Change options to new names and settings
-                update_option('wps_sub_pages', (get_option('csd_sub_pages') ? WPS_CHK_ON : ''));
-                update_option('wps_themes', (get_option('csd_themes_on') ? WPS_CHK_ON : ''));
-                update_option('wps_catarchives', (get_option('csd_catarchives_on') ? WPS_CHK_ON : ''));
-                update_option('wps_pagefilter', (get_option('csd_pagefilter_on') ? WPS_CHK_ON : ''));
-                update_option('wps_subdomainall', (get_option('csd_subdomainall_on') ? WPS_CHK_ON : ''));
+                update_option('wps_sub_pages', (get_option('csd_sub_pages') ? Wps_Plugin::VALUE_ON : ''));
+                update_option('wps_themes', (get_option('csd_themes_on') ? Wps_Plugin::VALUE_ON : ''));
+                update_option('wps_catarchives', (get_option('csd_catarchives_on') ? Wps_Plugin::VALUE_ON : ''));
+                update_option('wps_pagefilter', (get_option('csd_pagefilter_on') ? Wps_Plugin::VALUE_ON : ''));
+                update_option('wps_subdomainall', (get_option('csd_subdomainall_on') ? Wps_Plugin::VALUE_ON : ''));
                 // Delete Old CSD options, leave the SR options so they can go
                 // back to old plugin
                 delete_option('csd_themes_on');

@@ -11,8 +11,8 @@ function wps_blogurl() {
 
 //--- Return the domain of the blog
 function wps_domain() {
-	if (get_option ( WPS_OPT_DOMAIN )) {
-		$domain = get_option ( WPS_OPT_DOMAIN );
+	if (get_option ( Wps_Plugin::OPTION_DOMAIN )) {
+		$domain = get_option ( Wps_Plugin::OPTION_DOMAIN );
 	} else {
 		$domain = get_option ( 'home' );
 		$domain = substr ( $domain, 7 );
@@ -24,9 +24,9 @@ function wps_domain() {
 
 //--- Find all the Pages marked with the showall meta key
 function wps_showall_pages() {
-	global $wpdb, $wps_page_metakey_showall;
+	global $wpdb;
 	
-	$pages = $wpdb->get_col ( "SELECT Post_ID FROM {$wpdb->postmeta} WHERE meta_key = '{$wps_page_metakey_showall}' and meta_value = '1'" );
+	$pages = $wpdb->get_col ( "SELECT Post_ID FROM {$wpdb->postmeta} WHERE meta_key = '".Wps_Plugin::METAKEY_SHOWALL."' and meta_value = '1'" );
 	
 	return $pages;
 }

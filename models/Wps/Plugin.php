@@ -221,7 +221,7 @@ class Wps_Plugin
         add_filter('get_terms', array($this->_filters, 'wps_filter_get_terms'), 10, 3);
         
         // Need for attachment
-        if (get_option(WPS_OPT_ATTACHMENT)) {
+        if (get_option(Wps_Plugin::OPTION_ATTACHMENT)) {
             add_filter('the_content', array($this->_filters, 'wps_filter_content'));
             add_filter('wp_get_attachment_url', array($this->_filters, 'wps_filter_attachement_url'));
         }

@@ -6,7 +6,7 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
         global $wps_this_subdomain, $wps_category_base;
     
         // See if we're on a category subdomain
-        if ( $wps_this_subdomain && ($wps_this_subdomain->type == WPS_TYPE_CAT) ) {
+        if ( $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY) ) {
             if ( strpos( $_SERVER['REQUEST_URI'], $wps_category_base ) == 1 ) {
                 // if the url has the category base in it then we're in a sub category
                 foreach ( $rules as $key => $value ) {
@@ -26,7 +26,7 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
         global $wps_this_subdomain;
     
         // See if we're on a category subdomain
-        if ( $wps_this_subdomain && ($wps_this_subdomain->type == WPS_TYPE_AUTHOR) ) {
+        if ( $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_AUTHOR) ) {
             $rules = $wps_this_subdomain->getRewriteRules();
         }
     
@@ -49,7 +49,7 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     
         // If we have %category% in the permalink we also need to create rules without it.
         // This is because the category might be the subdomain and so wouldn't be in the url
-        if ( strstr( $wp_rewrite->permalink_structure, '%category%' ) && $wps_this_subdomain && ($wps_this_subdomain->type == WPS_TYPE_CAT) ) {
+        if ( strstr( $wp_rewrite->permalink_structure, '%category%' ) && $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY) ) {
             // Grab the permalink structure
             $perma_tmp = $wp_rewrite->permalink_structure;
     
@@ -99,7 +99,7 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     function wps_page_rewrite_rules( $rules ) {
         global $wps_this_subdomain, $wp_rewrite;
     
-        if ( $wps_this_subdomain && $wps_this_subdomain->type == WPS_TYPE_PAGE ) {
+        if ( $wps_this_subdomain && $wps_this_subdomain->type == Wps_Plugin::TYPE_PAGE ) {
             $pagestr = $wps_this_subdomain->slug;
     
             if ( $wp_rewrite->use_verbose_page_rules ) {
@@ -176,7 +176,7 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     function wps_root_rewrite_rules( $rules ) {
         global $wps_this_subdomain;
     
-        if ( $wps_this_subdomain && $wps_this_subdomain->type == WPS_TYPE_CAT ) {
+        if ( $wps_this_subdomain && $wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY ) {
             $rules = array();
         }
     

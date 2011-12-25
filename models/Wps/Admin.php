@@ -100,9 +100,9 @@ class Wps_Admin
         _e('Disable Plugin')?></th>
 				<td><input type="checkbox" name="wps_disabled"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(Wps_Plugin::OPTION_DISABLED));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_DISABLED));
         ?> /> <span class="setting-description">This will disable the
 						plugin's functionality whilst allowing you to continue configuring
 						it.</span></td>
@@ -113,9 +113,9 @@ class Wps_Admin
         _e('Make all Subdomains')?></th>
 				<td><input type="checkbox" name="wps_subdomainall"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(Wps_Plugin::OPTION_SUBALL));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_SUBALL));
         ?> /> <span class="setting-description">This will turn all main
 						Categories into Subdomains.<br /> You can select to exclude
 						categories from this by <a href="admin.php?page=wps_categories">editing
@@ -128,9 +128,9 @@ class Wps_Admin
         _e('Activate Page Subdomains')?></th>
 				<td><input type="checkbox" name="wps_subpages"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_SUBPAGES));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_SUBPAGES));
         ?> /> <span class="setting-description">Activate the Page
 						Subdomains.</span></td>
 			</tr>
@@ -140,9 +140,9 @@ class Wps_Admin
         _e('Activate Author Subdomains')?></th>
 				<td><input type="checkbox" name="wps_subauthors"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_SUBAUTHORS));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_SUBAUTHORS));
         ?> /> <span class="setting-description">Activate the Author
 						Subdomains.</span></td>
 			</tr>
@@ -152,9 +152,9 @@ class Wps_Admin
         _e('Activate Subdomain Themes')?></th>
 				<td><input type="checkbox" name="wps_themes"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_THEMES));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_THEMES));
         ?> /> <span class="setting-description">Activate the subdomain theme
 						system.<br /> To set different themes for each category, <a
 						href="admin.php?page=wps_categories">Edit them</a>.<br /> <br />
@@ -171,9 +171,9 @@ class Wps_Admin
         _e('Redirect Old Urls')?></th>
 				<td><input type="checkbox" name="wps_redirectold"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_REDIRECTOLD));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_REDIRECTOLD));
         ?> /> <span class="setting-description">If someone comes to the site
 						on an old category or page url it redirects them to the new
 						Subdomain one.</span>
@@ -186,9 +186,9 @@ class Wps_Admin
         _e('No Category Base')?></th>
     <td><input type="checkbox" name="wps_nocatbase"
     value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
     <?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_NOCATBASE));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_NOCATBASE));
         ?> /> Turns
     off the Category base on subdomains. <br />
     <b>Warning:</b> Will cause problems on pages that have the same slug
@@ -201,9 +201,9 @@ class Wps_Admin
         _e('Keep Pages on Subdomain')?></th>
 				<td><input type="checkbox" name="wps_keeppagesub"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_KEEPPAGESUB));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_KEEPPAGESUB));
         ?> /> <span class="setting-description">Activate this to have links
 						to your normal pages, not Subdomain or Category Tied, remain on
 						the subdomain being viewed<br /> <b>Note:</b> This could be bad
@@ -216,9 +216,9 @@ class Wps_Admin
         _e('Subdomain Roots as Indexes')?></th>
 				<td><input type="checkbox" name="wps_subisindex"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_SUBISINDEX));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_SUBISINDEX));
         ?> /> <span class="setting-description">The main page of Category
 						and Author Subdomains will be treated by Wordpress as an Index
 						rather than an archive.<br /> The difference between how an Index
@@ -231,9 +231,9 @@ class Wps_Admin
         _e('Manage Attachment')?></th>
 				<td><input type="checkbox" name="wps_attachment"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_ATTACHMENT));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_ATTACHMENT));
         ?> /> <span class="setting-description">The attachement pages and
 						link will be managed and show in the corresponding subdomains.</span>
 				</td>
@@ -251,9 +251,9 @@ class Wps_Admin
         _e('Use Archive Filtering')?></th>
 				<td><input type="checkbox" name="wps_arcfilter"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_ARCFILTER));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_ARCFILTER));
         ?> /> <span class="setting-description">Change Archives to just show
 						archive of the Category or Author Subdomain you're on.</span></td>
 			</tr>
@@ -263,9 +263,9 @@ class Wps_Admin
         _e('Use Page Filtering')?></th>
 				<td><input type="checkbox" name="wps_pagefilter"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_PAGEFILTER));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_PAGEFILTER));
         ?> /> <span class="setting-description">Activate the Page filtering
 						system. Use this to be able tie pages to categories.<br /> You tie
 						a page by setting custom field <b><?php
@@ -279,9 +279,9 @@ class Wps_Admin
         _e('Use Tag Filtering')?></th>
 				<td><input type="checkbox" name="wps_tagfilter"
 					value="<?php
-        echo WPS_CHK_ON?>"
+        echo Wps_Plugin::VALUE_ON?>"
 					<?php
-        checked(WPS_CHK_ON, get_option(WPS_OPT_TAGFILTER));
+        checked(Wps_Plugin::VALUE_ON, get_option(Wps_Plugin::OPTION_TAGFILTER));
         ?> /> <span class="setting-description">Activate the Tag filtering
 						system. Viewing Tags will show only the posts that belong to the
 						subdomain you are on.</span></td>
@@ -566,7 +566,7 @@ class Wps_Admin
     function wps_filter_on_off ($data)
     {
         if ($data) {
-            return WPS_CHK_ON;
+            return Wps_Plugin::VALUE_ON;
         }
         return '';
     }
@@ -589,8 +589,8 @@ class Wps_Admin
     
         // Is Wordpress version supported?
         if ($wp_version < Wps_Plugin::WP_VERSION_MIN) {
-            $notices .= '<h3>Warning: This version of Wordpress ('.$wp_version.') is unsupported so this plugin may not work.</h3>';
-            $notices .= '<h3>If you encounter problems try Wordpress Version '.WPS_WP_VERSION_MIN.' or above.</h3>';
+            $notices .= '<h3>Warning: This version of Wordpress (' . $wp_version . ') is unsupported so this plugin may not work.</h3>';
+            $notices .= '<h3>If you encounter problems try Wordpress Version ' . Wps_Plugin::WP_VERSION_MIN . ' or above.</h3>';
         }
     
         return $notices;

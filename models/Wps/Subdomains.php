@@ -10,7 +10,7 @@ class Wps_Subdomains {
     var $pages_on_index = false;
     
     function __construct() {
-        global $wpdb, $wps_page_metakey_subdomain;
+        global $wpdb;
     
         $table_name = $wpdb->prefix . "category_subdomains";
     
@@ -23,7 +23,7 @@ class Wps_Subdomains {
         */
     
         //--- Work out the Categories to subdomain
-        if ( get_option( WPS_OPT_SUBALL ) != "" ) {
+        if ( get_option( Wps_Plugin::OPTION_SUBALL ) != "" ) {
             $cats_exclude = $wpdb->get_col( "SELECT cat_ID FROM {$table_name} WHERE not_subdomain = 1" );
             $cats = array_diff( $cats_root, $cats_exclude );
         } else {
@@ -38,11 +38,11 @@ class Wps_Subdomains {
         }
     
         //--- Subdomain Pages if option is turned on
-        if ( get_option( WPS_OPT_SUBPAGES ) != "" ) {
+        if ( get_option( Wps_Plugin::OPTION_SUBPAGES ) != "" ) {
             //--- Get Pages that are to be Subdomains
-            //$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . $wps_page_metakey_subdomain . '&meta_value=true' );
-            //$pages = get_pages( 'meta_key=' . $wps_page_metakey_subdomain . '&meta_value=true' );
-            $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".$wps_page_metakey_subdomain."' and meta_value = '1'");
+            //$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . Wps_Plugin::METAKEY_SUBDOMAIN . '&meta_value=true' );
+            //$pages = get_pages( 'meta_key=' . Wps_Plugin::METAKEY_SUBDOMAIN . '&meta_value=true' );
+            $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '".Wps_Plugin::METAKEY_SUBDOMAIN."' and meta_value = '1'");
             	
             //--- Create Page Subdomains
             foreach ($pages as $page) {
@@ -51,7 +51,7 @@ class Wps_Subdomains {
         }
     
         //--- Subdomain Authors if option is turned on
-        if ( get_option( WPS_OPT_SUBAUTHORS ) != "" ) {
+        if ( get_option( Wps_Plugin::OPTION_SUBAUTHORS ) != "" ) {
             //--- Get Authors
             $authors = wps_get_authors();
             	
@@ -179,12 +179,12 @@ class Wps_Subdomains {
     
     function getPagesOnIndex() {
         if ( ! $this->pages_on_index ) {
-            global $wpdb, $wps_page_on_main_index;
+            global $wpdb;
             	
             $this->pages_on_index = array();
             	
-            //$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
-            //$pages = get_pages( 'meta_key=' . $wps_page_on_main_index . '&meta_value=true' );
+            //$pages = get_posts( 'numberposts=-1&post_type=page&meta_key=' . Wps_Plugin::METAKEY_ONMAININDEX . '&meta_value=true' );
+            //$pages = get_pages( 'meta_key=' . Wps_Plugin::METAKEY_ONMAININDEX . '&meta_value=true' );
             $pages = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '" . Wps_Plugin::METAKEY_ONMAININDEX . "' and meta_value = '1'");
             	
             foreach ($pages as $page) {

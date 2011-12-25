@@ -31,10 +31,10 @@ abstract class Wps_Subdomain_Abstract
             $join = '';
             
             switch ($this->type) {
-                case WPS_TYPE_AUTHOR:
+                case Wps_Plugin::TYPE_AUTHOR:
                     $where = 'posts.post_author=' . $this->id;
                     break;
-                case WPS_TYPE_CAT:
+                case Wps_Plugin::TYPE_CATEGORY:
                     $join = "JOIN {$wpdb->term_relationships} tr ON posts.ID = tr.object_id JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
                     $where = "tt.taxonomy = 'category' AND tt.term_id in (" . implode(',', $this->getAllIDs()) . ")";
                     break;
@@ -135,13 +135,13 @@ abstract class Wps_Subdomain_Abstract
     {
         
         switch ($this->type) {
-            case WPS_TYPE_CAT:
+            case Wps_Plugin::TYPE_CATEGORY:
                 $field = 'category_name';
                 break;
-            case WPS_TYPE_PAGE:
+            case Wps_Plugin::TYPE_PAGE:
                 return false;
                 break;
-            case WPS_TYPE_AUTHOR:
+            case Wps_Plugin::TYPE_AUTHOR:
                 $field = 'author_name';
                 break;
         }
@@ -160,10 +160,10 @@ abstract class Wps_Subdomain_Abstract
         if ($this->archive && ! empty($rules)) {
             // Filter by Author or Category
             switch ($this->type) {
-                case WPS_TYPE_CAT:
+                case Wps_Plugin::TYPE_CATEGORY:
                     $field = 'category_name';
                     break;
-                case WPS_TYPE_AUTHOR:
+                case Wps_Plugin::TYPE_AUTHOR:
                     $field = 'author_name';
                     break;
                 default:
