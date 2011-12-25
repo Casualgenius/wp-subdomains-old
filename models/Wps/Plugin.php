@@ -2,7 +2,7 @@
 
 class Wps_Plugin
 {
-    const VERSION = '3.0.0';
+    const VERSION = '2.0.0';
     
     const METAKEY_THEME = '_wps_page_theme';
     const METAKEY_SUBDOMAIN = '_wps_page_subdomain';
@@ -28,41 +28,49 @@ class Wps_Plugin
     const OPTION_KEEPPAGESUB = 'wps_keeppagesub';
     const OPTION_SUBISINDEX = 'wps_subisindex';
     const OPTION_ATTACHMENT = 'wps_attachment';
-
+    
     const VALUE_ON = 'on';
-
+    
     /**
      * @var Wps_Subdomains
      */
     protected $_subdomains;
-
+    
     /**
      * @var Wps_Subdomain
      */
     protected $_subdomain;
-
+    
     /**
-     * @var Wps_Actions
+     * @var Wps_Hooks_Actions
      */
     protected $_actions;
-
+    
+    /**
+     * @var Wps_Hooks_RewriteRules
+     */
+    protected $_rewriteRules;
+    
+    /**
+     * @var Wps_Hooks_Filters
+     */
     protected $_filters;
-
+    
     /**
      * @var array
      */
     protected $_showAllPages;
-
+    
     /**
      * @var string
      */
     protected $_categoryBase;
-
+    
     /**
      * @var boolean
      */
     protected $_permalinkSet;
-
+    
     function __construct ()
     {
         // @todo check this still required
@@ -82,6 +90,10 @@ class Wps_Plugin
             // add the Actions
             $this->_actions = new Wps_Hooks_Actions($this);
             $this->_addActions();
+            
+            // add the rewrite rules
+            $this->_rewriteRules = new Wps_Hooks_RewriteRules($this);
+            $this->_addRewriteRules();
             
             // add the Filters
             $this->_filters = new Wps_Hooks_Filters($this);
@@ -162,18 +174,20 @@ class Wps_Plugin
         add_action('save_post', array($this->_actions, 'wps_action_page_meta_save'));
     }
 
+    protected function _addRewriteRules ()
+    {
+        add_filter('rewrite_rules_array', array($this->_rewriteRules, 'wps_rewrite_rules'));
+        add_filter('root_rewrite_rules', array($this->_rewriteRules, 'wps_root_rewrite_rules'));
+        add_filter('post_rewrite_rules', array($this->_rewriteRules, 'wps_post_rewrite_rules'));
+        add_filter('page_rewrite_rules', array($this->_rewriteRules, 'wps_page_rewrite_rules'));
+        add_filter('date_rewrite_rules', array($this->_rewriteRules, 'wps_date_rewrite_rules'));
+        add_filter('tag_rewrite_rules', array($this->_rewriteRules, 'wps_tag_rewrite_rules'));
+        add_filter('category_rewrite_rules', array($this->_rewriteRules, 'wps_category_rewrite_rules'));
+        add_filter('author_rewrite_rules', array($this->_rewriteRules, 'wps_author_rewrite_rules'));
+    }
+    
     protected function _addFilters ()
     {
-        //add_filter ( 'posts_where', 'sd_posts_where' );
-        
-        add_filter('rewrite_rules_array', array($this->_filters, 'wps_rewrite_rules'));
-        add_filter('root_rewrite_rules', array($this->_filters, 'wps_root_rewrite_rules'));
-        add_filter('post_rewrite_rules', array($this->_filters, 'wps_post_rewrite_rules'));
-        add_filter('page_rewrite_rules', array($this->_filters, 'wps_page_rewrite_rules'));
-        add_filter('date_rewrite_rules', array($this->_filters, 'wps_date_rewrite_rules'));
-        add_filter('tag_rewrite_rules', array($this->_filters, 'wps_tag_rewrite_rules'));
-        add_filter('category_rewrite_rules', array($this->_filters, 'wps_category_rewrite_rules'));
-        add_filter('author_rewrite_rules', array($this->_filters, 'wps_author_rewrite_rules'));
         
         // Filters for Adjacent Posts
         // FIXME: Check args getting through
