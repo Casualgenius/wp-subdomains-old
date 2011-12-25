@@ -11,22 +11,27 @@ class Wps_Widgets_Sitelist
 
     var $main = '';
     
+    protected $_plugin;
+    
+    public function __construct(Wps_Plugin $plugin)
+    {
+        $this->_plugin = $plugin;
+    }
+    
     // static init callback
     function init ()
     {
         // Check for the required plugin functions. This will prevent fatal
         // errors occurring when you deactivate the dynamic-sidebar plugin.
-        if (! function_exists('register_sidebar_widget'))
+        if (! function_exists('wp_register_sidebar_widget'))
             return;
-        
-        $widget = new Wps_Widgets_Sitelist();
         
         // This registers our widget so it appears with the other available
         // widgets and can be dragged and dropped into any active sidebars.
-        register_sidebar_widget('WPS Sitelist', array($widget, 'display'));
+        wp_register_sidebar_widget('wps-sitelist', 'WPS Sitelist', array($this, 'display'));
         
         // This registers our optional widget control form.
-        register_widget_control('WPS Sitelist', array($widget, 'control'));
+        wp_register_widget_control('wps-sitelist', 'WPS Sitelist', array($this, 'control'));
     }
 
     function control ()
@@ -99,8 +104,6 @@ class Wps_Widgets_Sitelist
 
     function display ($args)
     {
-        global $wps_subdomains;
-        
         // $args is an array of strings that help widgets to conform to
         // the active theme: before_widget, before_title, after_widget,
         // and after_title are the array keys. Default tags: li and h2.
@@ -127,7 +130,7 @@ class Wps_Widgets_Sitelist
         // $cat_args = array('orderby' => 'name', 'show_count' => $c,
         // 'hierarchical' => $h, 'include' => $cats_to_exclude);
         $cat_args = array('hide_empty' => 0, 'orderby' => 'name', 'show_count' => $c, 
-        'include' => implode(',', $wps_subdomains->getCatIDs()));
+        'include' => implode(',', $this->_plugin->getSubdomains()->getCatIDs()));
         
         ?>
 <ul>
@@ -142,7 +145,3 @@ class Wps_Widgets_Sitelist
         echo $after_widget;
     }
 }
-
-add_action('widgets_init', array('WpsSitelistWidget', 'init'));
-
-?>

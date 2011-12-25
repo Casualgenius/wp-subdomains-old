@@ -3,18 +3,18 @@
 class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
 {
     function wps_category_rewrite_rules( $rules ) {
-        global $wps_this_subdomain, $wps_category_base;
+        global $wps_category_base;
     
         // See if we're on a category subdomain
-        if ( $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY) ) {
+        if ( $this->_plugin->getSubdomain() && ($this->_plugin->getSubdomain()->type == Wps_Plugin::TYPE_CATEGORY) ) {
             if ( strpos( $_SERVER['REQUEST_URI'], $wps_category_base ) == 1 ) {
                 // if the url has the category base in it then we're in a sub category
                 foreach ( $rules as $key => $value ) {
-                    $rules[$key] = str_replace( '$matches[1]', $wps_this_subdomain->slug . '/$matches[1]', $value );
+                    $rules[$key] = str_replace( '$matches[1]', $this->_plugin->getSubdomain()->slug . '/$matches[1]', $value );
                 }
             } else {
                 // Not in a sub category
-                $rules = $wps_this_subdomain->getRewriteRules();
+                $rules = $this->_plugin->getSubdomain()->getRewriteRules();
             }
     
         }
@@ -23,11 +23,9 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     }
     
     function wps_author_rewrite_rules( $rules ) {
-        global $wps_this_subdomain;
-    
         // See if we're on a category subdomain
-        if ( $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_AUTHOR) ) {
-            $rules = $wps_this_subdomain->getRewriteRules();
+        if ( $this->_plugin->getSubdomain() && ($this->_plugin->getSubdomain()->type == Wps_Plugin::TYPE_AUTHOR) ) {
+            $rules = $this->_plugin->getSubdomain()->getRewriteRules();
         }
     
         return $rules;
@@ -35,21 +33,19 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     
     // Check if we're on a subdomain and filter the date archive if we are
     function wps_date_rewrite_rules( $rules ) {
-        global $wps_this_subdomain;
-    
-        if ( $wps_this_subdomain ) {
-            $rules = $wps_this_subdomain->addRewriteFilter($rules);
+        if ( $this->_plugin->getSubdomain() ) {
+            $rules = $this->_plugin->getSubdomain()->addRewriteFilter($rules);
         }
     
         return $rules;
     }
     
     function wps_post_rewrite_rules( $rules ) {
-        global $wps_this_subdomain, $wp_rewrite;
+        global $wp_rewrite;
     
         // If we have %category% in the permalink we also need to create rules without it.
         // This is because the category might be the subdomain and so wouldn't be in the url
-        if ( strstr( $wp_rewrite->permalink_structure, '%category%' ) && $wps_this_subdomain && ($wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY) ) {
+        if ( strstr( $wp_rewrite->permalink_structure, '%category%' ) && $this->_plugin->getSubdomain() && ($this->_plugin->getSubdomain()->type == Wps_Plugin::TYPE_CATEGORY) ) {
             // Grab the permalink structure
             $perma_tmp = $wp_rewrite->permalink_structure;
     
@@ -89,18 +85,18 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     
         // If there is a date part in the permalink structure filter by the subdomain we're on
         // This is incase we're actually looking at an date archive rather than a post
-        if ( $has_date && $wps_this_subdomain) {
-            $rules = $wps_this_subdomain->addRewriteFilter($rules);
+        if ( $has_date && $this->_plugin->getSubdomain()) {
+            $rules = $this->_plugin->getSubdomain()->addRewriteFilter($rules);
         }
     
         return $rules;
     }
     
     function wps_page_rewrite_rules( $rules ) {
-        global $wps_this_subdomain, $wp_rewrite;
+        global $wp_rewrite;
     
-        if ( $wps_this_subdomain && $wps_this_subdomain->type == Wps_Plugin::TYPE_PAGE ) {
-            $pagestr = $wps_this_subdomain->slug;
+        if ( $this->_plugin->getSubdomain() && $this->_plugin->getSubdomain()->type == Wps_Plugin::TYPE_PAGE ) {
+            $pagestr = $this->_plugin->getSubdomain()->slug;
     
             if ( $wp_rewrite->use_verbose_page_rules ) {
                 $strToMatch = $pagestr;
@@ -164,19 +160,15 @@ class Wps_Hooks_RewriteRules extends Wps_Hooks_Abstract
     
     
     function wps_tag_rewrite_rules( $rules ) {
-        global $wps_this_subdomain;
-    
-        if ( $wps_this_subdomain ) {
-            $rules = $wps_this_subdomain->addRewriteFilter($rules);
+        if ( $this->_plugin->getSubdomain() ) {
+            $rules = $this->_plugin->getSubdomain()->addRewriteFilter($rules);
         }
     
         return $rules;
     }
     
     function wps_root_rewrite_rules( $rules ) {
-        global $wps_this_subdomain;
-    
-        if ( $wps_this_subdomain && $wps_this_subdomain->type == Wps_Plugin::TYPE_CATEGORY ) {
+        if ( $this->_plugin->getSubdomain() && $this->_plugin->getSubdomain()->type == Wps_Plugin::TYPE_CATEGORY ) {
             $rules = array();
         }
     

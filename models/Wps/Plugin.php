@@ -102,6 +102,9 @@ class Wps_Plugin
             
             // add the Filters
             $this->_addFilters();
+            
+            // add the Widgets
+            $this->_addWidgets();
         }
     }
 
@@ -250,5 +253,14 @@ class Wps_Plugin
         add_filter('month_link', array($this->_filters, 'wps_month_link'));
         add_filter('get_pagenum_link', array($this->_filters, 'wps_filter_general_url'));
         add_filter('list_cats', array($this->_filters, 'wps_list_cats'), 10, 2);
+    }
+    
+    protected function _addWidgets()
+    {
+        $widgetSitelist = new Wps_Widgets_Sitelist($this);
+        add_action('widgets_init', array($widgetSitelist, 'init'));
+        
+        $widgetCategories = new Wps_Widgets_Categories($this);
+        add_action('widgets_init', array($widgetCategories, 'init'));
     }
 }
