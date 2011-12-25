@@ -29,7 +29,7 @@ Author URI: http://casualgenius.com
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
+/*
 // Include required php files
 require_once ('plugin/install.php');
 require_once ('plugin/classes.php');
@@ -62,6 +62,7 @@ $wps_this_subdomain = false;
 $wps_showall_pages = array();
 
 // Defines
+
 define( 'WPS_VERSION', '1.0.1' );
 define( 'WPS_WP_VERSION_MIN', '2.7.0');
 define( 'WPS_TYPE_CAT', 1 );
@@ -210,7 +211,7 @@ class WpsPlugin {
 		
 		add_filter( 'get_pages', 'wps_filter_pages', 10 );
 		
-		/* URL Filters */
+		// URL Filters
 		add_filter( 'bloginfo_url', 'wps_filter_bloginfo_url', 10, 2 );
 		add_filter( 'bloginfo', 'wps_filter_bloginfo', 10, 2 );
 		add_filter( 'category_link', 'wps_category_link', 10, 2 );
@@ -230,5 +231,5 @@ register_activation_hook( __FILE__, 'wps_install' );
 //--- Run the Plugin
 global $WpsPlugin;
 $WpsPlugin = new WpsPlugin( );
-
+*/
 ?>

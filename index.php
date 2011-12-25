@@ -29,7 +29,7 @@ Author URI: http://casualgenius.com
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once ('plugin/install.php');
+require_once ('models/Wps/Hooks/Activation.php');
 require_once ('plugin/functions.php');
 
 // No Auto Loading Yet
@@ -52,7 +52,8 @@ require_once ('models/Wps/Widgets/categories.phpegories.php');
 $wps_filter_tags_in_loop = false;
 
 //--- Register the Activation Hook
-register_activation_hook(__FILE__, 'wps_install');
+$activation = new Wps_Hooks_Activation();
+register_activation_hook(__FILE__, array($activation, 'install'));
 
 //--- Run the Plugin
 $WpsPlugin = new Wps_Plugin();
