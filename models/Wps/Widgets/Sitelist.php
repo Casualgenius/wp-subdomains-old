@@ -55,8 +55,8 @@ class Wps_Widgets_Sitelist
             update_option('csd_widget_sitelist', $options);
         }
         
-        $title = attribute_escape($options['title']);
-        $main = attribute_escape($options['main']);
+        $title = esc_attr($options['title']);
+        $main = esc_attr($options['main']);
         $count = (bool) $options['count'];
         $hierarchical = (bool) $options['hierarchical'];
         $dropdown = (bool) $options['dropdown'];

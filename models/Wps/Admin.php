@@ -539,28 +539,28 @@ class Wps_Admin
 
     function wps_add_options ()
     {
-        add_menu_page('WP Subdomains', 'WP Subdomains', 7, 'wps-admin', array($this, 'getAdminPageWelcome'));
-        add_submenu_page('wps-admin', 'Categories', 'Categories', 7, 'categories', array($this, 'getAdminPageCategories'));
-        add_submenu_page('wps-admin', 'Pages', 'Pages', 7, 'pages', array($this, 'getAdminPagePages'));
-        add_submenu_page('wps-admin', 'Settings', 'Settings', 7, 'settings', array($this, 'getAdminPageSettings'));
+        add_menu_page('WP Subdomains', 'WP Subdomains', 'manage_options', 'wps-admin', array($this, 'getAdminPageWelcome'));
+        add_submenu_page('wps-admin', 'Categories', 'Categories', 'manage_options', 'categories', array($this, 'getAdminPageCategories'));
+        add_submenu_page('wps-admin', 'Pages', 'Pages', 'manage_options', 'pages', array($this, 'getAdminPagePages'));
+        add_submenu_page('wps-admin', 'Settings', 'Settings', 'manage_options', 'settings', array($this, 'getAdminPageSettings'));
     }
 
     function wps_admin_init ()
     {
         // this whitelists form elements on the options page
         register_setting('wps-settings-group', 'wps_domain');
-        register_setting('wps-settings-group', 'wps_disabled', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_subdomainall', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_subpages', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_subauthors', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_themes', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_redirectold', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_keeppagesub', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_subisindex', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_attachment', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_arcfilter', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_pagefilter', 'wps_filter_on_off');
-        register_setting('wps-settings-group', 'wps_tagfilter', 'wps_filter_on_off');
+        register_setting('wps-settings-group', 'wps_disabled', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_subdomainall', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_subpages', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_subauthors', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_themes', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_redirectold', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_keeppagesub', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_subisindex', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_attachment', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_arcfilter', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_pagefilter', array($this, 'wps_filter_on_off'));
+        register_setting('wps-settings-group', 'wps_tagfilter', array($this, 'wps_filter_on_off'));
     }
 
     function wps_filter_on_off ($data)

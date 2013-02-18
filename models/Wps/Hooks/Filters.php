@@ -273,7 +273,7 @@ class Wps_Hooks_Filters extends Wps_Hooks_Abstract
     {
         
         // Filter Tags of the wps_tag_cloud arg is set
-        if ($args['wps_tag_cloud'] === true) {
+        if (isset($args['wps_tag_cloud']) && ($args['wps_tag_cloud'] === true)) {
             global $wpdb;
             
             // If the subdomain doesn't know it's posts then fetch them

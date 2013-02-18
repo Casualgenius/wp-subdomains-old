@@ -53,7 +53,7 @@ class Wps_Widgets_Categories
             update_option('csd_widget_categories', $options);
         }
         
-        $title = attribute_escape($options['title']);
+        $title = esc_attr($options['title']);
         $count = (bool) $options['count'];
         $hierarchical = (bool) $options['hierarchical'];
         $dropdown = (bool) $options['dropdown'];

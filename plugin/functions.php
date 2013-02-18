@@ -18,17 +18,6 @@ function wps_domain ()
     return $domain;
 }
 
-// --- Find all the Pages marked with the showall meta key
-function wps_showall_pages ()
-{
-    global $wpdb;
-    
-    $pages = $wpdb->get_col(
-    "SELECT Post_ID FROM {$wpdb->postmeta} WHERE meta_key = '" . Wps_Plugin::METAKEY_SHOWALL . "' and meta_value = '1'");
-    
-    return $pages;
-}
-
 // --- Get the details of the authors for use with Author Subdomains
 function wps_get_authors ($exclude_admin = false)
 {

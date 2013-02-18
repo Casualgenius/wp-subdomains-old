@@ -47,7 +47,7 @@ require_once ('models/Wps/Subdomain/Page.php');
 
 // Widgets
 require_once ('models/Wps/Widgets/Sitelist.php');
-require_once ('models/Wps/Widgets/categories.phpegories.php');
+require_once ('models/Wps/Widgets/Categories.php');
 
 $wps_filter_tags_in_loop = false;
 

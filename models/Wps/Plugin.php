@@ -4,7 +4,7 @@ class Wps_Plugin
 {
     const VERSION = '2.0.0';
     
-    const WP_VERSION_MIN = '3.0.0';
+    const WP_VERSION_MIN = '3.0';
     
     const METAKEY_THEME = '_wps_page_theme';
     const METAKEY_SUBDOMAIN = '_wps_page_subdomain';
